@@ -1,0 +1,13 @@
+{
+    "configurations": [
+        
+
+    
+        {
+            "type": "node-terminal",
+            "name": "JavaScript 偵錯終端",
+            "request": "launch",
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
