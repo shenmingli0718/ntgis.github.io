@@ -76,7 +76,7 @@ def create_map1(zipcode, server_ip):
     import math
     
     # 讀取大台北鄉鎮市區界圖shpe file(含台北市、新北市)
-    Big_Taipei_data = gpd.read_file('Taipei.shp', encoding='utf-8')
+    Big_Taipei_data = gpd.read_file('static/shapefiles/Taipei.shp', encoding='utf-8')
     Ｎew_Taipei_data = Big_Taipei_data[(Big_Taipei_data['COUNTYNAME']=='新北市')]
     #
     # 讀取 "新北市觀光旅遊景點(中文).csv" 檔案
@@ -195,7 +195,7 @@ def create_map1(zipcode, server_ip):
     error_msg=""
 
     #將地圖保存為 HTML 字串
-    mymap.save("mymap.html")
+    mymap.save("static/mymap.html")
     #
     map_io = io.BytesIO()
     mymap.save(map_io, close_file=False)
@@ -217,7 +217,7 @@ def create_map2(zipcode, viewpoint, server_ip):
     from dash import no_update
     
     # 讀取大台北鄉鎮市區界圖shpe file(含台北市、新北市)
-    Big_Taipei_data = gpd.read_file('Taipei.shp', encoding='utf-8')
+    Big_Taipei_data = gpd.read_file('static/shapefiles/Taipei.shp', encoding='utf-8')
     Ｎew_Taipei_data = Big_Taipei_data[(Big_Taipei_data['COUNTYNAME']=='新北市')]
     #
     # 讀取 "新北市觀光旅遊景點(中文).csv" 檔案

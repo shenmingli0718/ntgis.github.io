@@ -39,7 +39,8 @@ global selected_df
 #]
 
 # 建立 Dash 應用
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
+app = dash.Dash(__name__,  external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
+server=app.server   # gunicorn int_gis_use_dash:server --bind 0.0.0.0:8799
 # C#app = dash.Dash(__name__, suppress_callback_exceptions=True)
 ###
 import socket
@@ -57,49 +58,17 @@ def get_host_ip():
 # 獲取主機 IP 地址
 server_ip = get_host_ip()
 ###
-app.index_string = """
-<!DOCTYPE html>
-<html>
-    <head>
-        {%metas%}
-        <title>{%title%}</title>
-        {%favicon%}
-        {%css%}
-        <script>
-            // 定義伺服器的 IP 地址，供 JavaScript 使用
-            const server_ip = "{server_ip}";
-            // 父窗口監聽子窗口的 postMessage 消息
-            window.addEventListener('message', function(event) {
-                // 確保消息格式正確，並檢查 action
-                if (event.data && event.data.action === 'updateMap') {
-                    console.log('收到來自子窗口的更新地圖請求，ID: ', event.data.id);
-                    // 通知 Dash 的後端邏輯
-                    DashRenderer.dispatchEvent({
-                        type: 'updateMap',
-                        payload: event.data.id
-                    });
-                }
-            });
-        </script>
-    </head>
-    <body>
-        {%app_entry%}
-        <footer>
-            {%config%}
-            {%scripts%}
-            {%renderer%}
-        </footer>
-    </body>
-</html>
-"""
 # 初始化地圖函數
 ##
 # 自定義樣式函數
 def create_map(name):
     
     # 讀取大台北鄉鎮市區界圖shpe file(含台北市、新北市)
-    Big_Taipei_data = gpd.read_file('./Taipei.shp', encoding='utf-8')
+    # Big_Taipei_data = gpd.read_file('static/shapefiles/Taipei.shp', encoding='utf-8')
+    shapefile_path = os.path.join(os.path.dirname(__file__), 'static', 'shapefiles', 'Taipei.shp')
+    Big_Taipei_data = gpd.read_file(shapefile_path, encoding='utf-8')
     Ｎew_Taipei_data = Big_Taipei_data[(Big_Taipei_data['COUNTYNAME']=='新北市')]
+    
     ##
     # 設定地圖中心點和縮放級別，這裡以新北市的經緯度為例
     map_center = [24.989868, 121.656173]  # 新北市中心位置約在石碇區石碇里
@@ -149,7 +118,7 @@ def create_map(name):
 
     #folium.Marker([getLoc.latitude, getLoc.longitude], popup=popup).add_to(mymap)
 
-    mymap.save("mymap.html")
+    mymap.save("static/mymap.html")
     #
     # 將地圖保存為 HTML 字串
     map_io = io.BytesIO()
@@ -269,7 +238,7 @@ from dash import no_update
     prevent_initial_call=True
 )
 def update_map_trigger(data):
-    print('(update_map_trigger) 被觸發，data: ', data)
+    print('(update_map_trigger)被觸發,data: ', data)
     if data:
         return data
     return no_update
@@ -281,7 +250,7 @@ def update_map_trigger(data):
     prevent_initial_call=True
 )
 def refresh_map(data):
-    print('(refresh_map) 被觸發，data: ', data)
+    print('(refresh_map)被觸發,data: ', data)
     if data:
         # 解析传递的 zip 和 id，这里假设 zip 是固定值
         zip_code = '999'  # 示例值
@@ -327,67 +296,6 @@ def receive_message():
 def get_host():
     return request.host.split(':')[0]  # 返回伺服器的 IP 地址
 ###
-#
-# 頁面佈局1：主頁面包含Folium地圖和Marker按鈕操作
-def layout_main():
-    return html.Div([
-        html.H1("景點地圖管理系統"),
-        #html.Iframe(id="map", srcDoc=open("mymap.html", "r").read(), width="100%", height="600"),
-    ])
-
-# 頁面佈局2：編輯資料頁面
-def layout_edit():
-    return html.Div([
-        html.H1("景點編輯資料"),
-        dcc.Input(id='edit-location-id', type='text', placeholder='景點ID', readOnly=True),
-        dcc.Input(id='transport-info', type='text', placeholder='交通資訊'),
-        dcc.Input(id='opening-hours', type='text', placeholder='開放時間'),
-        dcc.Input(id='ticket-info', type='text', placeholder='門票資訊'),
-        html.Button('儲存資料', id='save-button'),
-        html.Div(id='save-status')
-    ])
-
-# 頁面佈局3：照片上傳頁面
-def layout_upload():
-    return html.Div([
-        html.H1("景點照片上傳"),
-        dcc.Input(id='upload-location-id', type='text', placeholder='景點ID', readOnly=True),
-        dcc.Upload(id='upload-photo', children=html.Button('上傳照片')),
-        html.Div(id='upload-photo-status')
-    ])
-
-# 頁面佈局4：照片下載頁面
-def layout_download():
-    return html.Div([
-        html.H1("景點照片下載"),
-        dcc.Input(id='download-location-id', type='text', placeholder='景點ID', readOnly=True),
-        html.Button('下載照片', id='download-button'),
-        dcc.Download(id='download-photo')
-    ])
-#
-##
-## 路由到不同頁面
-##
-##@app.callback(
-##    Output('page-content', 'children'),
-##    Input('url', 'pathname')
-##)
-##def display_page(pathname):
-##    print("(display_page) pathname= ", pathname) 
-##    if pathname.startswith('/upload'):
-##        location_id = pathname.split('/')[-1]
-##        return html.Div([html.H3(f"上傳照片 for 景點 {location_id}"), html.Button("關閉視窗", id='close-window')])
-##    elif pathname.startswith('/download'):
-##        location_id = pathname.split('/')[-1]
-##        return html.Div([html.H3(f"下載照片 for 景點 {location_id}"), html.Button("關閉視窗", id='close-window')])
-##    elif pathname.startswith('/edit'):
-##        location_id = pathname.split('/')[-1]
-##        return html.Div([html.H3(f"填寫相關訊息 for 景點 {location_id}"), html.Button("關閉視窗", id='close-window')])
-##    #return "404 Page Not Found"
-##    return ""
-
-###
-
 #start
 # 運行應用
 if __name__ == '__main__':
@@ -396,4 +304,4 @@ if __name__ == '__main__':
     #app.run_server(mode="inline", port=8799, use_reloader=False)
     
 # 將應用靜態導出為 HTML 文件
-app.run_server(export=True, directory='exported')
+#app.run_server(export=True, directory='exported')
