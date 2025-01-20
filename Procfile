@@ -1,1 +1,0 @@
-web: gunicorn int_gis_use_dash:server --bind 0.0.0.0:8799 --workers 2
