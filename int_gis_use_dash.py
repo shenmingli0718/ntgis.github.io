@@ -300,7 +300,7 @@ def get_host():
 # 運行應用
 if __name__ == '__main__':
     #app.run_server(debug=True)
-    app.run_server(host='0.0.0.0', debug=False, port=8799, use_reloader=False)
+    app.run_server(host='0.0.0.0', debug=True, port=8799, use_reloader=False)
     #app.run_server(mode="inline", port=8799, use_reloader=False)
     
 # 將應用靜態導出為 HTML 文件
