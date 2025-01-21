@@ -4,7 +4,7 @@
         "builder": "NIXPACKS"
     },
     "deploy": {
-        "startCommand": "python -m pip install -r requirements/production.txt && python manage.py collectstatic --noinput --settings=config.settings.production && python manage.py migrate --settings=config.settings.production && gunicorn --workers=4 config.wsgi",
+        "startCommand": "python -m pip install -r requirements.txt && python int_gis_use_dash.py collectstatic --noinput --settings=config.settings.production && python int_gis_use_dash.py migrate --settings=config.settings.production && gunicorn --workers=4 config.wsgi",
         "restartPolicyType": "ON_FAILURE",
         "restartPolicyMaxRetries": 5
     }
