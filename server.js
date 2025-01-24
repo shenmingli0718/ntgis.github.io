@@ -315,7 +315,9 @@ app.post('/api/update-csv', async (req, res) => {
   }
 });         
 //**
+// 获取端口（如果没有 PORT 环境变量，则使用默认端口 3000）
+const PORT = process.env.PORT || 3000;
 // 啟動伺服器
-app.listen(3000, () => {
-    console.log('Server is running on http://localhost:3000');
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
