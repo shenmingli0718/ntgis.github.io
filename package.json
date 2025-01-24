@@ -7,6 +7,7 @@
     },
     "dependencies": {
         "body-parser": "^1.19.0",
+        "cors": "^2.8.5",
         "express": "^4.21.2"
     },
     "description": "gis-backend API",
@@ -23,5 +24,6 @@
     "bugs": {
         "url": "https://github.com/shenmingli0718/intgis.github.io/issues"
     },
-    "homepage": "https://github.com/shenmingli0718/intgis.github.io#readme"
+    "homepage": "https://github.com/shenmingli0718/intgis.github.io#readme",
+    "devDependencies": {}
 }
