@@ -17,10 +17,19 @@
         "path": "^0.12.7"
     },
     "description": "gis-backend API",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/shenmingli0718/intgis.github.io.git"
+    },
     "keywords": [
         "gis-backend",
         "API"
     ],
     "author": "Mingli, Shen",
-    "license": "ISC"
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/shenmingli0718/intgis.github.io/issues"
+    },
+    "homepage": "https://github.com/shenmingli0718/intgis.github.io#readme",
+    "devDependencies": {}
 }
