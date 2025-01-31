@@ -121,7 +121,7 @@ def create_map1(zipcode, server_ip):
                     function openWindow(action, locationId, name, server_ip) {{
                         // server_ip :取自Dash 的 index_string 模板定義
                         let url = '';
-                        let customedomain='https://intgisgithubio-production.up.railway.app';
+                        let customedomain='https://ntgisgithubio-production.up.railway.app';
                         if (action === "upload") {{
                             // url = `http://${{server_ip}}:8799/static/upload.html?id=${{locationId}}&name=${{name}}`;
                             url = `${{customedomain}}/static/upload.html?id=${{locationId}}&name=${{name}}`;
@@ -275,7 +275,7 @@ def create_map2(zipcode, viewpoint, server_ip):
                 <script>
                     function openWindow(action, locationId, name, server_ip) {{
                           let url = '';
-                          let customedomain='https://intgisgithubio-production.up.railway.app';  //114/01/21 modified
+                          let customedomain='https://ntgisgithubio-production.up.railway.app';  //114/01/21 modified
                           if (action === "upload") {{
                               // url = `http://${{server_ip}}:8799/static/upload.html?id=${{locationId}}&name=${{name}}`;
                               url = `${{customedomain}}/static/upload.html?id=${{locationId}}&name=${{name}}`;
