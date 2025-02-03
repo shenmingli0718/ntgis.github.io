@@ -8,11 +8,27 @@ def style_function(feature):
         'fillOpacity': 0.5,
     }
 ##
+def get_tourist_data():
+    import requests
+    import pandas as pd
+    import os
+
+    API_URL = os.getenv("API_URL") + "/get_tourist_data"
+    response = requests.get(API_URL)
+    if response.status_code == 200:
+        data = response.json()
+        df = pd.DataFrame(data)
+        return df
+    else:
+        print("Failed to fetch 新北觀光旅遊檔")
+        return None
+
 def create_vp_dropdown_options(zipcode):
     import pandas as pd
     from dash import no_update
 #
-    df = pd.read_csv('./static/newtpe_tourist_att.csv', encoding='utf-8')
+    # df = pd.read_csv('./static/newtpe_tourist_att.csv', encoding='utf-8')
+    df = get_tourist_data()
     selected_df = df[df['Zipcode'] == zipcode].reset_index(drop=True)
     vp_dropdown_options = [
     {'label': f"{idx+1} {row['Name']}", 'value': row['Name']}
@@ -28,7 +44,8 @@ def get_unique_zip_area_df():
     from dash import Dash, dcc, html, Output, Input
 
     # 讀取 "新北市觀光旅遊景點(中文).csv" 檔案
-    df = pd.read_csv('./static/newtpe_tourist_att.csv', encoding='utf-8')
+    # df = pd.read_csv('./static/newtpe_tourist_att.csv', encoding='utf-8')
+    df = get_tourist_data()
 
     # 定義從 Add 欄位擷取區域名稱的函數（取兩到三個中文字，結尾為「區」）
     def extract_area_name(address):
@@ -80,7 +97,9 @@ def create_map1(zipcode, server_ip):
     Ｎew_Taipei_data = Big_Taipei_data[(Big_Taipei_data['COUNTYNAME']=='新北市')]
     #
     # 讀取 "新北市觀光旅遊景點(中文).csv" 檔案
-    df = pd.read_csv('./static/newtpe_tourist_att.csv', encoding='utf-8')
+    # df = pd.read_csv('./static/newtpe_tourist_att.csv', encoding='utf-8')
+    df = get_tourist_data()
+
     ##計算出某區所有景點之中心點
     selected_center=calculate_center_point(df,zipcode)
     mymap = Map(location=selected_center, zoom_start=12)
@@ -225,7 +244,9 @@ def create_map2(zipcode, viewpoint, server_ip):
     Ｎew_Taipei_data = Big_Taipei_data[(Big_Taipei_data['COUNTYNAME']=='新北市')]
     #
     # 讀取 "新北市觀光旅遊景點(中文).csv" 檔案
-    df = pd.read_csv('./static/newtpe_tourist_att.csv', encoding='utf-8')
+    # df = pd.read_csv('./static/newtpe_tourist_att.csv', encoding='utf-8')
+    df = get_tourist_data()
+    
     # Add 新北市觀光旅遊景點標記 to the map
     #selected_df = df[df['Zipcode'] == zipcode]
     #for idx, row in selected_df.iterrows():
