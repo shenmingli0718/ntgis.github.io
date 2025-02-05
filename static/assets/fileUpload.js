@@ -94,7 +94,8 @@ async function check_capacitylimit(uploadChunks) {
     formData.append('uploadChunks', uploadChunks);
 
     try {
-        // const response = await fetch('http://localhost:3000/check_capacity_limit', {
+        //  const response = await fetch('http://localhost:3000/check_capacity_limit', {
+        // 
         const response = await fetch('https://ntgisapigithubio-production.up.railway.app/check_capacity_limit', {
             method: 'POST',
             body: formData,
