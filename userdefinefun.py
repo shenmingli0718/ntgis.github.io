@@ -13,15 +13,52 @@ def get_tourist_data():
     import pandas as pd
     import os
 
-    API_URL = os.getenv("API_URL") + "/get_tourist_data"
+    API_URL = os.getenv("API_URL")
+    if API_URL is None or API_URL.strip() == "":
+        API_URL = "https://ntgisapigithubio-production.up.railway.app"
+
+    API_URL = API_URL + "/get_tourist_data"
+    print(f"Fetching data from: {API_URL}")  # Debugging output
+
     response = requests.get(API_URL)
     if response.status_code == 200:
         data = response.json()
-        df = pd.DataFrame(data)
+        df = pd.DataFrame(data)  # Normal case
+        # print("DataFrame Columns:", df.columns)  # Debugging output
+        # print("First few rows:\n", df.head())  # Debugging output
+        
+##        print("Raw API Response:", data[:3])  # Debugging output
+
+##        # If the first row is a list of column names, set it explicitly
+##        if isinstance(data, list) and isinstance(data[0], list):
+##            headers = data[0]  # First row is column headers
+##            body = data[1:]    # Actual data
+##            
+##            # 🔹 Ensure headers match row length by truncating or padding
+##            max_columns = max(len(row) for row in body)  # Get the longest row
+##            headers = headers[:max_columns]  # Truncate headers if they exceed row length
+##            
+##            # 🔹 Trim extra columns in data rows
+##            fixed_body = [row[:max_columns] for row in body]  # Ensure all rows match max_columns
+##            
+##            df = pd.DataFrame(fixed_body, columns=headers)  # Assign cleaned headers
+##        else:
+##            df = pd.DataFrame(data)  # Normal case
+        
+        # Ensure column names are strings
+##        df.columns = df.columns.astype(str)
+##        df.columns = df.columns.str.strip()
+
+##        print("DataFrame Columns:", df.columns)  # Debugging output
+##        print("First few rows:\n", df.head())  # Debugging output
+        
+        if 'Zipcode' not in df.columns:
+            raise KeyError("Missing 'Zipcode' column in API response")
+
         return df
     else:
         print("Failed to fetch 新北觀光旅遊檔")
-        return None
+        return pd.DataFrame()
 
 def create_vp_dropdown_options(zipcode):
     import pandas as pd
