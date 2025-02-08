@@ -107,14 +107,16 @@ def calculate_center_point(data,selected_zipcode):
     data = data.dropna(subset=['Zipcode'])
 
     # 將Zipcode轉換為整數
-    data['Zipcode'] = data['Zipcode'].astype(int)
+    #data['Zipcode'] = data['Zipcode'].astype(int)
 
     # 篩選出指定Zipcode的資料
     selected_data = data[data['Zipcode'] == selected_zipcode]
 
     # 計算該 Zipcode 的地理中心點
-    center_px = selected_data['Px'].mean()
-    center_py = selected_data['Py'].mean()
+    # center_px = selected_data['Px'].mean()
+    # center_py = selected_data['Py'].mean()
+    center_px = selected_data['Px'].astype(float).mean()
+    center_py = selected_data['Py'].astype(float).mean()
     selected_center = [center_py, center_px]
     return selected_center
     
@@ -159,7 +161,8 @@ def create_map1(zipcode, server_ip):
     marker_cluster = MarkerCluster()
     ##
     for idx, row in selected_df.iterrows():
-        if not math.isnan(row['Py']) and not math.isnan(row['Px']):
+        #if not math.isnan(row['Py'].astype(float)) and not math.isnan(row['Px'].astype(float)):
+        if row['Py'] is not None and row['Px'] is not None:
             ##
              # 確保 Name 和 Id 是字符串，並移除特殊字符
             name = str(row['Name']).replace("{", "").replace("}", "")
@@ -312,7 +315,8 @@ def create_map2(zipcode, viewpoint, server_ip):
     folium.GeoJson(New_Taipei_data, style_function=style_function).add_to(mymap)
     #
     for idx, row in selected_df.iterrows():
-        if not math.isnan(row['Py']) and not math.isnan(row['Px']):
+        # if not math.isnan(row['Py']) and not math.isnan(row['Px']):
+        if row['Py'] is not None and row['Px'] is not None:
             ###
             ##
              # 確保 Name 和 Id 是字符串，並移除特殊字符
