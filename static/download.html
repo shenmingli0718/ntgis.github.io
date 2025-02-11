@@ -211,7 +211,7 @@
         //**
         async function downloadFile(filename) {
             // const downloadUrl = `http://localhost:3000/uploads/${subid}/${filename}`; // 檢查這個 URL 是否正確
-            const downloadUrl = `https://ntgisapigithubio-production.up.railway.app/uploads/${subid}/${filename}`; // 檢查這個 URL 是否正確
+            const downloadUrl = `https://ntgisapigithubio-production.up.railway.app/preview/${subid}/${filename}`; // 檢查這個 URL 是否正確
 
             try {
                 const response = await fetch(downloadUrl, { method: 'GET' });
