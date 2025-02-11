@@ -159,7 +159,9 @@
         function previewFile(filename) {
             const previewModal = document.getElementById('preview-modal');
             const previewImage = document.getElementById('preview-image');
-            previewImage.src = `uploads/${subid}/${filename}`;
+            // previewImage.src = `./uploads/${subid}/${filename}`;
+            // previewImage.src = `/app/static/uploads/${subid}/${filename}`;
+            previewImage.src = `https://ntgisapigithubio-production.up.railway.app/uploads/${subid}/${filename}`
             previewModal.style.display = 'flex';
         }
 
