@@ -134,7 +134,7 @@
 
                 const files = await response.json();
                 if (files.length === 0) {
-                    fileListDiv.innerHTML = "此照片目錄中没有照片";
+                    fileListDiv.innerHTML = "此照片目錄中尚無照片";
                 } else {
                     let html = '<ul>';
                     files.forEach(file => {
