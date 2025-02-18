@@ -195,6 +195,16 @@ def create_map1(zipcode, server_ip):
                             window.open(url, '填寫相關資訊', 'scrollbars=yes, resizable=yes, width=600, height=400');
                         }}   
                     }}
+                    // 使Popup跟隨地圖縮放(視窗內)
+                    function updatePopupSize() {{
+                        let zoom = mymap.getZoom();
+                        let popup = document.querySelector(".leaflet-popup-content");
+                        if (popup) {{
+                            let scaleFactor = zoom / 10;
+                            popup.style.transform = `scale(${scaleFactor})`;
+                        }}
+                    }}
+                    mymap.on("zoomend", updatePopupSize);
 
                    // function openWindow(action, locationId, name) {{
                    //     fetch('/get_host')
@@ -360,36 +370,46 @@ def create_map2(zipcode, viewpoint, server_ip):
                     }}
 
                     // 父窗口監聽消息
-                    window.addEventListener('message', function (event) {{
+                    // window.addEventListener('message', function (event) {{
                         // 检查消息来源（可选，确保安全性）
                         // if (event.origin !== 'http://localhost:8799/static/edit.html') return;
-                        if (event.data && event.data.action === 'updateMap') {{
-                            console.log(`收到更新地圖请求，景點ID: ${{event.data.id}}`);
+                    //    if (event.data && event.data.action === 'updateMap') {{
+                    //        console.log(`收到更新地圖请求，景點ID: ${{event.data.id}}`);
                             // 向 Dash 發送更新事件
-                            //DashRenderer.dispatchEvent({{
+                            // DashRenderer.dispatchEvent({{
                             //    type: 'updateMap',
                             //    payload: event.data.id
-                            //}});
+                            // }});
                             // 在此處調用刷新邏輯
                             // fetch('/message', {{
-                            fetch('http://localhost:8799/message', {{
-                                method: 'POST',
-                                headers: {{ 'Content-Type': 'application/json' }},
-                                body: JSON.stringify({{ action: 'updateMap', id: event.data.id }})
+                    //        fetch('http://localhost:8799/message', {{
+                    //            method: 'POST',
+                    //            headers: {{ 'Content-Type': 'application/json' }},
+                    //            body: JSON.stringify({{ action: 'updateMap', id: event.data.id }})
                             // }}).then(() => {{
                             //    console.log('地圖刷新請求已發送到後端');
                             //
-                            }})
-                            .then(response => {{
-                                if (!response.ok) {{
-                                    throw new Error(`HTTP error! status: ${{response.status}}`);
-                                }}
-                                return response.json();
-                            }})
-                            .then(data => console.log('後端響應:', data))
-                            .catch(error => console.error('後端請求失敗:', error));
-                         }}
-                    }});
+                    //        }})
+                    //        .then(response => {{
+                    //            if (!response.ok) {{
+                    //                throw new Error(`HTTP error! status: ${{response.status}}`);
+                    //            }}
+                    //            return response.json();
+                    //        }})
+                    //        .then(data => console.log('後端響應:', data))
+                    //        .catch(error => console.error('後端請求失敗:', error));
+                    //     }}
+                    // }});
+                    // 使Popup跟隨地圖縮放(視窗內)
+                    function updatePopupSize() {{
+                        let zoom = mymap.getZoom();
+                        let popup = document.querySelector(".leaflet-popup-content");
+                        if (popup) {{
+                            let scaleFactor = zoom / 10;
+                            popup.style.transform = `scale(${scaleFactor})`;
+                        }}
+                    }}
+                    mymap.on("zoomend", updatePopupSize);
                 </script>
             """
             ##
