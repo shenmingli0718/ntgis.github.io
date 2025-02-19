@@ -195,7 +195,7 @@ def create_map1(zipcode, server_ip):
                             window.open(url, '填寫相關資訊', 'scrollbars=yes, resizable=yes, width=600, height=400');
                         }}   
                     }}
-                    // 使Popup跟隨地圖縮放(視窗內)
+                    // 使標記的Popup跟隨地圖縮放(視窗內)
                     function updatePopupSize() {{
                         let zoom = mymap.getZoom();
                         let popup = document.querySelector(".leaflet-popup-content");
@@ -400,7 +400,7 @@ def create_map2(zipcode, viewpoint, server_ip):
                     //        .catch(error => console.error('後端請求失敗:', error));
                     //     }}
                     // }});
-                    // 使Popup跟隨地圖縮放(視窗內)
+                    // 使標記的Popup跟隨地圖縮放(視窗內)
                     function updatePopupSize() {{
                         let zoom = mymap.getZoom();
                         let popup = document.querySelector(".leaflet-popup-content");
