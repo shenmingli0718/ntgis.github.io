@@ -201,7 +201,7 @@ def create_map1(zipcode, server_ip):
                         let popup = document.querySelector(".leaflet-popup-content");
                         if (popup) {{
                             let scaleFactor = zoom / 10;
-                            popup.style.transform = `scale(${scaleFactor})`;
+                            popup.style.transform = `scale(${{scaleFactor}})`;
                         }}
                     }}
                     mymap.on("zoomend", updatePopupSize);
@@ -406,7 +406,7 @@ def create_map2(zipcode, viewpoint, server_ip):
                         let popup = document.querySelector(".leaflet-popup-content");
                         if (popup) {{
                             let scaleFactor = zoom / 10;
-                            popup.style.transform = `scale(${scaleFactor})`;
+                            popup.style.transform = `scale(${{scaleFactor}})`;
                         }}
                     }}
                     mymap.on("zoomend", updatePopupSize);
