@@ -198,11 +198,12 @@ def create_map1(zipcode, server_ip):
                     // 使標記的Popup跟隨地圖縮放(視窗內)
                     function updatePopupSize() {{
                         let zoom = mymap.getZoom();
-                        let popup = document.querySelector(".leaflet-popup-content");
-                        if (popup) {{
-                            let scaleFactor = zoom / 10;
+                        let scaleFactor = Math.min(1.5, Math.max(0.5, zoom / 12));  // 控制 Popup 縮放比例
+
+                        document.querySelectorAll(".leaflet-popup-content-wrapper").forEach(popup => {{
                             popup.style.transform = `scale(${{scaleFactor}})`;
-                        }}
+                            popup.style.transformOrigin = "center";
+                        }});
                     }}
                     mymap.on("zoomend", updatePopupSize);
 
@@ -403,11 +404,12 @@ def create_map2(zipcode, viewpoint, server_ip):
                     // 使標記的Popup跟隨地圖縮放(視窗內)
                     function updatePopupSize() {{
                         let zoom = mymap.getZoom();
-                        let popup = document.querySelector(".leaflet-popup-content");
-                        if (popup) {{
-                            let scaleFactor = zoom / 10;
+                        let scaleFactor = Math.min(1.5, Math.max(0.5, zoom / 12));  // 控制 Popup 縮放比例
+
+                        document.querySelectorAll(".leaflet-popup-content-wrapper").forEach(popup => {{
                             popup.style.transform = `scale(${{scaleFactor}})`;
-                        }}
+                            popup.style.transformOrigin = "center";
+                        }});
                     }}
                     mymap.on("zoomend", updatePopupSize);
                 </script>
