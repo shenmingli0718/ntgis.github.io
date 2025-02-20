@@ -169,43 +169,44 @@ def create_map1(zipcode, server_ip):
             id_ = str(row['Id']).replace("{", "").replace("}", "")
             ## 使用 f-string 替代 .format()
             popup_html = f"""
-                <b>{name}</b><br>
-                <b>{row['Opentime']}</b><br>
-                <b>{row['Add']}</b><br>
-                <b>{row['Tel']}</b><br><br>
-                <button onclick="openWindow('upload', '{id_}', '{name}', '{server_ip}')">上傳照片</button><br><br>
-                <button onclick="openWindow('download', '{id_}', '{name}', '{server_ip}')">下載照片</button><br><br>
-                <!-- <button onclick="openWindow('edit', '{id_}', '{name}')">填寫相關資訊</button> -->
-                <script>
-                    function openWindow(action, locationId, name, server_ip) {{
-                        // server_ip :取自Dash 的 index_string 模板定義
-                        let url = '';
-                        let customedomain='https://ntgisgithubio-production.up.railway.app';
-                        if (action === "upload") {{
+                <div id="popup-content" style="width: auto; max-width: 60vx; max-height: 60vh; overflow-y: auto;">
+                    <b>{name}</b><br>
+                    <b>{row['Opentime']}</b><br>
+                    <b>{row['Add']}</b><br>
+                    <b>{row['Tel']}</b><br><br>
+                    <button onclick="openWindow('upload', '{id_}', '{name}', '{server_ip}')">上傳照片</button><br><br>
+                    <button onclick="openWindow('download', '{id_}', '{name}', '{server_ip}')">下載照片</button><br><br>
+                    <!-- <button onclick="openWindow('edit', '{id_}', '{name}')">填寫相關資訊</button> -->
+                    <script>
+                        function openWindow(action, locationId, name, server_ip) {{
+                            // server_ip :取自Dash 的 index_string 模板定義
+                            let url = '';
+                            let customedomain='https://ntgisgithubio-production.up.railway.app';
+                            if (action === "upload") {{
                             // url = `http://${{server_ip}}:8799/static/upload.html?id=${{locationId}}&name=${{name}}`;
-                            url = `${{customedomain}}/static/upload.html?id=${{locationId}}&name=${{name}}`;
-                            window.open(url, '上傳照片', 'width=600, height=400');
-                        }} else if (action === "download") {{
+                                url = `${{customedomain}}/static/upload.html?id=${{locationId}}&name=${{name}}`;
+                                window.open(url, '上傳照片', 'width=600, height=400');
+                            }} else if (action === "download") {{
                             // url = `http://${{server_ip}}:8799/static/download.html?id=${{locationId}}&name=${{name}}`;
-                             url = `${{customedomain}}/static/download.html?id=${{locationId}}&name=${{name}}`;
-                            window.open(url, '下載照片', 'scrollbars=yes, resizable=yes, width=600, height=400');
-                        }} else if (action === "edit") {{
+                                url = `${{customedomain}}/static/download.html?id=${{locationId}}&name=${{name}}`;
+                                window.open(url, '下載照片', 'scrollbars=yes, resizable=yes, width=600, height=400');
+                            }} else if (action === "edit") {{
                             // url = `http://${{server_ip}}:8799/static/edit.html?id=${{locationId}}&name=${{name}}`;
-                             url = `${{customedomain}}/static/edit.html?id=${{locationId}}&name=${{name}}`;
-                            window.open(url, '填寫相關資訊', 'scrollbars=yes, resizable=yes, width=600, height=400');
-                        }}   
-                    }}
-                    // 使標記的Popup跟隨地圖縮放(視窗內)
-                    function updatePopupSize() {{
-                        let zoom = mymap.getZoom();
-                        let scaleFactor = Math.min(1.5, Math.max(0.5, zoom / 12));  // 控制 Popup 縮放比例
+                                url = `${{customedomain}}/static/edit.html?id=${{locationId}}&name=${{name}}`;
+                                window.open(url, '填寫相關資訊', 'scrollbars=yes, resizable=yes, width=600, height=400');
+                            }}   
+                        }}
+                        // 使標記的Popup跟隨地圖縮放(視窗內)
+                        function updatePopupSize() {{
+                            let zoom = mymap.getZoom();
+                            let scaleFactor = Math.min(1.5, Math.max(0.5, zoom / 12));  // 控制 Popup 縮放比例
 
-                        document.querySelectorAll(".leaflet-popup-content-wrapper").forEach(popup => {{
-                            popup.style.transform = `scale(${{scaleFactor}})`;
-                            popup.style.transformOrigin = "center";
-                        }});
-                    }}
-                    mymap.on("zoomend", updatePopupSize);
+                            document.querySelectorAll(".leaflet-popup-content-wrapper").forEach(popup => {{
+                                popup.style.transform = `scale(${{scaleFactor}})`;
+                                popup.style.transformOrigin = "center";
+                            }});
+                        }}
+                        mymap.on("zoomend", updatePopupSize);
 
                    // function openWindow(action, locationId, name) {{
                    //     fetch('/get_host')
@@ -242,7 +243,8 @@ def create_map1(zipcode, server_ip):
                         //    }}
                         //   }};
                     // }}
-                </script>
+                    </script>
+                </div>
             """
 
 
@@ -335,40 +337,41 @@ def create_map2(zipcode, viewpoint, server_ip):
             id_ = str(row['Id']).replace("{", "").replace("}", "")
             ## 使用 f-string 替代 .format()
             popup_html = f"""
-                <b>{name}</b><br>
-                <b>{row['Opentime']}</b><br>
-                <b>{row['Add']}</b><br>
-                <b>{row['Tel']}</b><br>
-                <b>{row['Px']}(景點X座標)</b><br>
-                <b>{row['Py']}(景點Y座標)</b><br>
-                <b>{row['Changetime']}(資料異動時間)</b><br><br>
-                <button onclick="openWindow('upload', '{id_}', '{name}', '{server_ip}')">上傳照片</button><br><br>
-                <button onclick="openWindow('download', '{id_}', '{name}', '{server_ip}')">下載照片</button><br><br>
-                <button onclick="openWindow('edit', '{id_}', '{name}', '{server_ip}')">填寫相關資訊</button>
-                <script>
-                    function openWindow(action, locationId, name, server_ip) {{
-                          let url = '';
-                          let customedomain='https://ntgisgithubio-production.up.railway.app';  //114/01/21 modified
-                          if (action === "upload") {{
+                <div id="popup-content" style="width: auto; max-width: 60vx; max-height: 60vh; overflow-y: auto;">
+                    <b>{name}</b><br>
+                    <b>{row['Opentime']}</b><br>
+                    <b>{row['Add']}</b><br>
+                    <b>{row['Tel']}</b><br>
+                    <b>{row['Px']}(景點X座標)</b><br>
+                    <b>{row['Py']}(景點Y座標)</b><br>
+                    <b>{row['Changetime']}(資料異動時間)</b><br><br>
+                    <button onclick="openWindow('upload', '{id_}', '{name}', '{server_ip}')">上傳照片</button><br><br>
+                    <button onclick="openWindow('download', '{id_}', '{name}', '{server_ip}')">下載照片</button><br><br>
+                    <button onclick="openWindow('edit', '{id_}', '{name}', '{server_ip}')">填寫相關資訊</button>
+                    <script>
+                        function openWindow(action, locationId, name, server_ip) {{
+                            let url = '';
+                            let customedomain='https://ntgisgithubio-production.up.railway.app';  //114/01/21 modified
+                            if (action === "upload") {{
                               // url = `http://${{server_ip}}:8799/static/upload.html?id=${{locationId}}&name=${{name}}`;
-                              url = `${{customedomain}}/static/upload.html?id=${{locationId}}&name=${{name}}`;
-                              const newWindow = window.open(url, '上傳照片', 'width=600, height=400');
-                        }} else if (action === "download") {{
+                                url = `${{customedomain}}/static/upload.html?id=${{locationId}}&name=${{name}}`;
+                                const newWindow = window.open(url, '上傳照片', 'width=600, height=400');
+                            }} else if (action === "download") {{
                               // url = `http://${{server_ip}}:8799/static/download.html?id=${{locationId}}&name=${{name}}`;
-                              url = `${{customedomain}}/static/download.html?id=${{locationId}}&name=${{name}}`;
-                              const newWindow = window.open(url, '下載照片', 'scrollbars=yes, resizable=yes, width=600, height=400');
+                                    url = `${{customedomain}}/static/download.html?id=${{locationId}}&name=${{name}}`;
+                                    const newWindow = window.open(url, '下載照片', 'scrollbars=yes, resizable=yes, width=600, height=400');
                               //const newWindow = window.open(url, '下載照片', 'scrollbars=yes, resizable=yes, width=800, height=600');
-                        }} else if (action === "edit") {{
+                            }} else if (action === "edit") {{
                               // url = `http://${{server_ip}}:8799/static/edit.html?id=${{locationId}}&name=${{name}}`;
-                              url = `${{customedomain}}/static/edit.html?id=${{locationId}}&name=${{name}}`;
+                                    url = `${{customedomain}}/static/edit.html?id=${{locationId}}&name=${{name}}`;
                               // const newWindow = window.open(url, '填寫相關資訊', 'scrollbars=yes, resizable=yes, width=600, height=400, noopener, noreferrer');
-                              const newWindow = window.open(url, '填寫相關資訊', 'scrollbars=yes, resizable=yes, width=600, height=400');
+                                    const newWindow = window.open(url, '填寫相關資訊', 'scrollbars=yes, resizable=yes, width=600, height=400');
                               if (!newWindow) {{
                                   console.error('子窗口打開失敗，請檢查瀏覽器設置是否阻止彈出窗口。');
                               }}  
                               // newWindow.document.write(`<h3>填寫相關資訊 for 景點 ${{locationId}}(${{name}})</h3><button onclick="window.close()">關閉視窗</button>`);
-                           }};
-                    }}
+                            }};
+                        }}
 
                     // 父窗口監聽消息
                     // window.addEventListener('message', function (event) {{
@@ -413,6 +416,7 @@ def create_map2(zipcode, viewpoint, server_ip):
                     }}
                     mymap.on("zoomend", updatePopupSize);
                 </script>
+            </div>
             """
             ##
             #marker_cluster.add_child(Marker([row['Py'], row['Px']]))
