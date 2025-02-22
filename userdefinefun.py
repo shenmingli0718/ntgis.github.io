@@ -253,7 +253,7 @@ def create_map1(zipcode, server_ip):
             ##
             #print("(create_map1) popup_html= ", popup_html)
             #iframe = folium.IFrame(popup_html, width=150, height=150)
-            iframe = branca.element.IFrame(popup_html, width=200, height="auto")
+            iframe = branca.element.IFrame(popup_html, width=200, height=300)
             popup = folium.Popup(iframe, max_width="auto")
             ##popup = folium.Popup(popup_html, max_width=300)
             ##
@@ -423,7 +423,7 @@ def create_map2(zipcode, viewpoint, server_ip):
             ##
             #print("(create_map1) popup_html= ", popup_html)
             #iframe = folium.IFrame(popup_html, width=150, height=150)
-            iframe = branca.element.IFrame(popup_html, width=250, height="auto")
+            iframe = branca.element.IFrame(popup_html, width=250, height=300)
             popup = folium.Popup(iframe, max_width="auto")
             #popup = folium.Popup(popup_html, max_width=300)
             ##
