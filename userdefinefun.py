@@ -168,8 +168,10 @@ def create_map1(zipcode, server_ip):
             name = str(row['Name']).replace("{", "").replace("}", "")
             id_ = str(row['Id']).replace("{", "").replace("}", "")
             ## 使用 f-string 替代 .format()
+            ## popup_html = f"""
+            ##    <div id="popup-content" style="width: auto; max-width: 60vx; max-height: 60vh; overflow-y: auto;">
             popup_html = f"""
-                <div id="popup-content" style="width: auto; max-width: 60vx; max-height: 60vh; overflow-y: auto;">
+                <div id="popup-content">        
                     <b>{name}</b><br>
                     <b>{row['Opentime']}</b><br>
                     <b>{row['Add']}</b><br>
@@ -336,8 +338,10 @@ def create_map2(zipcode, viewpoint, server_ip):
             name = str(row['Name']).replace("{", "").replace("}", "")
             id_ = str(row['Id']).replace("{", "").replace("}", "")
             ## 使用 f-string 替代 .format()
+            ## popup_html = f"""
+            ##    <div id="popup-content" style="width: auto; max-width: 60vx; max-height: 60vh; overflow-y: auto;">
             popup_html = f"""
-                <div id="popup-content" style="width: auto; max-width: 60vx; max-height: 60vh; overflow-y: auto;">
+                <div id="popup-content">
                     <b>{name}</b><br>
                     <b>{row['Opentime']}</b><br>
                     <b>{row['Add']}</b><br>
