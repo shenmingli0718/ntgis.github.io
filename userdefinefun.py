@@ -253,8 +253,8 @@ def create_map1(zipcode, server_ip):
             ##
             #print("(create_map1) popup_html= ", popup_html)
             #iframe = folium.IFrame(popup_html, width=150, height=150)
-            iframe = branca.element.IFrame(popup_html, width=200, height=260)
-            popup = folium.Popup(iframe, max_width=250)
+            iframe = branca.element.IFrame(popup_html, width=200, height="auto")
+            popup = folium.Popup(iframe, max_width="auto")
             ##popup = folium.Popup(popup_html, max_width=300)
             ##
             marker_cluster.add_child(Marker(location = [row['Py'], row['Px']], popup = popup, icon=folium.Icon(color="green")))
@@ -423,8 +423,8 @@ def create_map2(zipcode, viewpoint, server_ip):
             ##
             #print("(create_map1) popup_html= ", popup_html)
             #iframe = folium.IFrame(popup_html, width=150, height=150)
-            iframe = branca.element.IFrame(popup_html, width=250, height=350)
-            popup = folium.Popup(iframe, max_width=300)
+            iframe = branca.element.IFrame(popup_html, width=250, height="auto")
+            popup = folium.Popup(iframe, max_width="auto")
             #popup = folium.Popup(popup_html, max_width=300)
             ##
             ## marker_cluster.add_child(Marker(location = [row['Py'], row['Px']], popup = popup, icon=folium.Icon(color="green")))
