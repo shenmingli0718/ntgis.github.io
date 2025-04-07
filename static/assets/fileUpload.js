@@ -66,7 +66,8 @@ async function uploadFile(file,subid) {
 
         try {
             // const response = await fetch('http://localhost:3000/2024_aut_Python_proj', {
-            const response = await fetch('https://ntgisapigithubio-production.up.railway.app/2024_aut_Python_proj', {
+            // const response = await fetch('https://ntgisapigithubio-production.up.railway.app/2024_aut_Python_proj', {
+            const response = await fetch('https://ntgisapi.zeabur.app/2024_aut_Python_proj', {
                 method: 'POST',
                 body: formData,
             });
@@ -96,7 +97,8 @@ async function check_capacitylimit(uploadChunks) {
     try {
         //  const response = await fetch('http://localhost:3000/check_capacity_limit', {
         // 
-        const response = await fetch('https://ntgisapigithubio-production.up.railway.app/check_capacity_limit', {
+        // const response = await fetch('https://ntgisapigithubio-production.up.railway.app/check_capacity_limit', {
+        const response = await fetch('https://ntgisapi.zeabur.app/check_capacity_limit', {
             method: 'POST',
             body: formData,
         });

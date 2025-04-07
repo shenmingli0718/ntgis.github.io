@@ -15,7 +15,9 @@ def get_tourist_data():
 
     API_URL = os.getenv("API_URL")
     if API_URL is None or API_URL.strip() == "":
-        API_URL = "https://ntgisapigithubio-production.up.railway.app"
+##      API_URL = "https://ntgisapigithubio-production.up.railway.app"
+        API_URL = "https://ntgisapi.zeabur.app"
+
 
     API_URL = API_URL + "/get_tourist_data"
     print(f"Fetching data from: {API_URL}")  # Debugging output
@@ -183,7 +185,8 @@ def create_map1(zipcode, server_ip):
                         function openWindow(action, locationId, name, server_ip) {{
                             // server_ip :取自Dash 的 index_string 模板定義
                             let url = '';
-                            let customedomain='https://ntgisgithubio-production.up.railway.app';
+                            // let customedomain='https://ntgisgithubio-production.up.railway.app';
+                            let customedomain='https://ntgis.zeabur.app';
                             if (action === "upload") {{
                             // url = `http://${{server_ip}}:8799/static/upload.html?id=${{locationId}}&name=${{name}}`;
                                 url = `${{customedomain}}/static/upload.html?id=${{locationId}}&name=${{name}}`;
@@ -355,7 +358,8 @@ def create_map2(zipcode, viewpoint, server_ip):
                     <script>
                         function openWindow(action, locationId, name, server_ip) {{
                             let url = '';
-                            let customedomain='https://ntgisgithubio-production.up.railway.app';  //114/01/21 modified
+                            // let customedomain='https://ntgisgithubio-production.up.railway.app';  //114/01/21 modified
+                            let customedomain='https://ntgis.zeabur.app';
                             if (action === "upload") {{
                               // url = `http://${{server_ip}}:8799/static/upload.html?id=${{locationId}}&name=${{name}}`;
                                 url = `${{customedomain}}/static/upload.html?id=${{locationId}}&name=${{name}}`;
