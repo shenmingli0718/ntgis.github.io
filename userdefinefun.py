@@ -262,7 +262,7 @@ def create_map1(zipcode, server_ip):
             popup = folium.Popup(iframe, max_width="auto")
             ##popup = folium.Popup(popup_html, max_width=300)
             ##
-            marker_cluster.add_child(Marker(location = [row['Py'], row['Px']], popup = popup, icon=folium.Icon(color="green")))
+            marker_cluster.add_child(Marker(location = [row['Py'], row['Px']], popup = popup, icon=folium.Icon(color="red")))
             mymap.add_child(marker_cluster)
     #
     print("trace 1 on create_map1")
@@ -439,7 +439,7 @@ def create_map2(zipcode, viewpoint, server_ip):
             ## mymap.add_child(marker_cluster)
             ###
             ## Marker(location = [row['Py'], row['Px']], popup = row['Name'], icon=folium.Icon(color="green")).add_to(mymap)
-            Marker(location = [row['Py'], row['Px']], popup =popup, icon=folium.Icon(color="green")).add_to(mymap)
+            Marker(location = [row['Py'], row['Px']], popup =popup, icon=folium.Icon(color="red")).add_to(mymap)
     #
     #vp_dropdown_options = [
     #{'label': f"{x+1} {row['Name']}", 'value': row['Name']}
