@@ -166,10 +166,10 @@ app.layout = dbc.Container([
             html.Br(),
             #html.Div(id='error-message', style={'color': 'red', 'margin-top': '10px'}),
             html.Div(id='error-message', style={'color': 'red', 'marginTop': '10px'}),
-        ], width=3),
+        ], width=3, className="dash-col-left"),
         dbc.Col([
             html.Iframe(id='map', width='100%', height='600'),
-        ], width=9),
+        ], width=9, className="dash-col-right"),
         dcc.Store(id='selected-location'),  # 儲存選擇的景點資訊
         dcc.Store(id='map-update-data')  # 用于触发地图更新的存储组件
         
