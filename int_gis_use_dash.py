@@ -39,7 +39,9 @@ global selected_df
 #]
 
 # 建立 Dash 應用
-app = dash.Dash(__name__,  external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
+app = dash.Dash(__name__, meta_tags=[
+                {"name": "viewport", "content": "width=device-width, initial-scale=1"}
+            ], external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
 server=app.server   # gunicorn int_gis_use_dash:server --bind 0.0.0.0:8799
 # C#app = dash.Dash(__name__, suppress_callback_exceptions=True)
 ###
