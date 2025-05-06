@@ -2,7 +2,7 @@
 
 @media screen {
     iframe#map {
-        border:2px solid rgb(226, 142, 142);
+        border: 2px solid red;
         margin: 2px;
     }
 }
@@ -32,5 +32,13 @@
 
     iframe#map {
         height: 300px !important;
+    }
+
+    #popup-content {
+        font-size: 13px;
+    }
+    #popup-content button {
+        font-size: 13px;
+        padding: 6px 10px;
     }
 }

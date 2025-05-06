@@ -173,13 +173,13 @@ def create_map1(zipcode, server_ip):
             ## popup_html = f"""
             ##    <div id="popup-content" style="width: auto; max-width: 60vx; max-height: 60vh; overflow-y: auto;">
             popup_html = f"""
-                <div id="popup-content">        
+                <div id="popup-content" style="min-width: 30vw; max-width: 90vw; max-height: 60vh; overflow-y: auto; font-size: 14px;">        
                     <b>{name}</b><br>
                     <b>{row['Opentime']}</b><br>
                     <b>{row['Add']}</b><br>
                     <b>{row['Tel']}</b><br><br>
-                    <button onclick="openWindow('upload', '{id_}', '{name}', '{server_ip}')">上傳照片</button><br><br>
-                    <button onclick="openWindow('download', '{id_}', '{name}', '{server_ip}')">下載照片</button><br><br>
+                    <button style="width: 100%; margin-top: 5px;" onclick="openWindow('upload', '{id_}', '{name}', '{server_ip}')">上傳照片</button><br><br>
+                    <button style="width: 100%; margin-top: 5px;" onclick="openWindow('download', '{id_}', '{name}', '{server_ip}')">下載照片</button><br><br>
                     <!-- <button onclick="openWindow('edit', '{id_}', '{name}')">填寫相關資訊</button> -->
                     <script>
                         function openWindow(action, locationId, name, server_ip) {{
@@ -202,16 +202,15 @@ def create_map1(zipcode, server_ip):
                             }}   
                         }}
                         // 使標記的Popup跟隨地圖縮放(視窗內)
-                        function updatePopupSize() {{
-                            let zoom = mymap.getZoom();
-                            let scaleFactor = Math.min(1.5, Math.max(0.5, zoom / 12));  // 控制 Popup 縮放比例
-
-                            document.querySelectorAll(".leaflet-popup-content-wrapper").forEach(popup => {{
-                                popup.style.transform = `scale(${{scaleFactor}})`;
-                                popup.style.transformOrigin = "center";
-                            }});
-                        }}
-                        mymap.on("zoomend", updatePopupSize);
+                        // function updatePopupSize() {{
+                        //    let zoom = mymap.getZoom();
+                        //    let scaleFactor = Math.min(1.5, Math.max(0.5, zoom / 12));  // 控制 Popup 縮放比例
+                        //    document.querySelectorAll(".leaflet-popup-content-wrapper").forEach(popup => {{
+                        //        popup.style.transform = `scale(${{scaleFactor}})`;
+                        //        popup.style.transformOrigin = "center";
+                        //    }});
+                        // }}
+                        // mymap.on("zoomend", updatePopupSize);
 
                    // function openWindow(action, locationId, name) {{
                    //     fetch('/get_host')
@@ -258,8 +257,9 @@ def create_map1(zipcode, server_ip):
             ##
             #print("(create_map1) popup_html= ", popup_html)
             #iframe = folium.IFrame(popup_html, width=150, height=150)
-            iframe = branca.element.IFrame(popup_html, width=200, height=300)
-            popup = folium.Popup(iframe, max_width="auto")
+            iframe = branca.element.IFrame(popup_html, width=200, height=180)
+            popup = folium.Popup(iframe, max_width=200)
+            # popup = folium.Popup(popup_html, max_width='auto')
             ##popup = folium.Popup(popup_html, max_width=300)
             ##
             marker_cluster.add_child(Marker(location = [row['Py'], row['Px']], popup = popup, icon=folium.Icon(color="red")))
@@ -344,7 +344,7 @@ def create_map2(zipcode, viewpoint, server_ip):
             ## popup_html = f"""
             ##    <div id="popup-content" style="width: auto; max-width: 60vx; max-height: 60vh; overflow-y: auto;">
             popup_html = f"""
-                <div id="popup-content">
+                <div id="popup-content" style="margin: 5px; min-width: 30vw; max-width: 90vw; max-height: 60vh; overflow-y: auto; font-size: 14px;">
                     <b>{name}</b><br>
                     <b>{row['Opentime']}</b><br>
                     <b>{row['Add']}</b><br>
@@ -352,9 +352,9 @@ def create_map2(zipcode, viewpoint, server_ip):
                     <b>{row['Px']}(景點X座標)</b><br>
                     <b>{row['Py']}(景點Y座標)</b><br>
                     <b>{row['Changetime']}(資料異動時間)</b><br><br>
-                    <button onclick="openWindow('upload', '{id_}', '{name}', '{server_ip}')">上傳照片</button><br><br>
-                    <button onclick="openWindow('download', '{id_}', '{name}', '{server_ip}')">下載照片</button><br><br>
-                    <button onclick="openWindow('edit', '{id_}', '{name}', '{server_ip}')">填寫相關資訊</button>
+                    <button style="width: 100%; ;" onclick="openWindow('upload', '{id_}', '{name}', '{server_ip}')">上傳照片</button><br><br>
+                    <button style="width: 100%; margin-top: 5px;" onclick="openWindow('download', '{id_}', '{name}', '{server_ip}')">下載照片</button><br><br>
+                    <button style="width: 100%; margin-top: 5px;" onclick="openWindow('edit', '{id_}', '{name}', '{server_ip}')">填寫相關資訊</button>
                     <script>
                         function openWindow(action, locationId, name, server_ip) {{
                             let url = '';
@@ -386,7 +386,7 @@ def create_map2(zipcode, viewpoint, server_ip):
                         // 检查消息来源（可选，确保安全性）
                         // if (event.origin !== 'http://localhost:8799/static/edit.html') return;
                     //    if (event.data && event.data.action === 'updateMap') {{
-                    //        console.log(`收到更新地圖请求，景點ID: ${{event.data.id}}`);
+                    //        console.log(`收到更新地margin-top: 5px圖请求，景點ID: ${{event.data.id}}`);
                             // 向 Dash 發送更新事件
                             // DashRenderer.dispatchEvent({{
                             //    type: 'updateMap',
@@ -413,16 +413,15 @@ def create_map2(zipcode, viewpoint, server_ip):
                     //     }}
                     // }});
                     // 使標記的Popup跟隨地圖縮放(視窗內)
-                    function updatePopupSize() {{
-                        let zoom = mymap.getZoom();
-                        let scaleFactor = Math.min(1.5, Math.max(0.5, zoom / 12));  // 控制 Popup 縮放比例
-
-                        document.querySelectorAll(".leaflet-popup-content-wrapper").forEach(popup => {{
-                            popup.style.transform = `scale(${{scaleFactor}})`;
-                            popup.style.transformOrigin = "center";
-                        }});
-                    }}
-                    mymap.on("zoomend", updatePopupSize);
+                    // function updatePopupSize() {{
+                    //    let zoom = mymap.getZoom();
+                    //    let scaleFactor = Math.min(1.5, Math.max(0.5, zoom / 12));  // 控制 Popup 縮放比例
+                    //    document.querySelectorAll(".leaflet-popup-content-wrapper").forEach(popup => {{
+                    //        popup.style.transform = `scale(${{scaleFactor}})`;
+                    //        popup.style.transformOrigin = "center";
+                    //    }});
+                    //}}
+                    //mymap.on("zoomend", updatePopupSize);
                 </script>
             </div>
             """
@@ -431,8 +430,11 @@ def create_map2(zipcode, viewpoint, server_ip):
             ##
             #print("(create_map1) popup_html= ", popup_html)
             #iframe = folium.IFrame(popup_html, width=150, height=150)
-            iframe = branca.element.IFrame(popup_html, width=250, height=350)
-            popup = folium.Popup(iframe, max_width="auto")
+            # iframe = branca.element.IFrame(popup_html, width="100%", height="100%")
+            iframe = branca.element.IFrame(popup_html, width=200, height=180)
+            # popup = folium.Popup(iframe, max_width="auto")
+            popup = folium.Popup(iframe, max_width=200)
+            #popup = folium.Popup(popup_html, max_width='auto')
             #popup = folium.Popup(popup_html, max_width=300)
             ##
             ## marker_cluster.add_child(Marker(location = [row['Py'], row['Px']], popup = popup, icon=folium.Icon(color="green")))
