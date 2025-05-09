@@ -173,13 +173,13 @@ def create_map1(zipcode, server_ip):
             ## popup_html = f"""
             ##    <div id="popup-content" style="width: auto; max-width: 60vx; max-height: 60vh; overflow-y: auto;">
             popup_html = f"""
-                <div id="popup-content" style="min-width: 30vw; max-width: 90vw; max-height: 60vh; overflow-y: auto; font-size: 14px;">        
+                <div id="popup-content" style="max-width: 98vw; max-height: 98vh; font-size: 14px;">        
                     <b>{name}</b><br>
                     <b>{row['Opentime']}</b><br>
                     <b>{row['Add']}</b><br>
                     <b>{row['Tel']}</b><br><br>
-                    <button style="width: 100%; margin-top: 5px;" onclick="openWindow('upload', '{id_}', '{name}', '{server_ip}')">上傳照片</button><br><br>
-                    <button style="width: 100%; margin-top: 5px;" onclick="openWindow('download', '{id_}', '{name}', '{server_ip}')">下載照片</button><br><br>
+                    <button style="width: 100%;" onclick="openWindow('upload', '{id_}', '{name}', '{server_ip}')">上傳照片</button><br><br>
+                    <button style="width: 100%;" onclick="openWindow('download', '{id_}', '{name}', '{server_ip}')">下載照片</button><br><br>
                     <!-- <button onclick="openWindow('edit', '{id_}', '{name}')">填寫相關資訊</button> -->
                     <script>
                         function openWindow(action, locationId, name, server_ip) {{
@@ -258,8 +258,8 @@ def create_map1(zipcode, server_ip):
             #print("(create_map1) popup_html= ", popup_html)
             #iframe = folium.IFrame(popup_html, width=150, height=150)
             iframe = branca.element.IFrame(popup_html, width=200, height=180)
-            popup = folium.Popup(iframe, max_width=200)
-            # popup = folium.Popup(popup_html, max_width='auto')
+            # popup = folium.Popup(iframe, max_width=200, max_height=180)
+            popup = folium.Popup(iframe, max_width='auto')
             ##popup = folium.Popup(popup_html, max_width=300)
             ##
             marker_cluster.add_child(Marker(location = [row['Py'], row['Px']], popup = popup, icon=folium.Icon(color="red")))
@@ -320,7 +320,7 @@ def create_map2(zipcode, viewpoint, server_ip):
     # 提取經緯度的單一值
         latitude = selected_df.iloc[0]['Py']
         longitude = selected_df.iloc[0]['Px']
-    # 建立地圖
+    # 建立地圖min-width: 30vw; 
         mymap = folium.Map(location=[latitude, longitude], zoom_start=12)
     else:
     # 當 selected_df 為空時的處理
@@ -344,7 +344,7 @@ def create_map2(zipcode, viewpoint, server_ip):
             ## popup_html = f"""
             ##    <div id="popup-content" style="width: auto; max-width: 60vx; max-height: 60vh; overflow-y: auto;">
             popup_html = f"""
-                <div id="popup-content" style="margin: 5px; min-width: 30vw; max-width: 90vw; max-height: 60vh; overflow-y: auto; font-size: 14px;">
+                <div id="popup-content" style="max-width: 98vw; max-height: 98vh; font-size: 14px;">
                     <b>{name}</b><br>
                     <b>{row['Opentime']}</b><br>
                     <b>{row['Add']}</b><br>
@@ -352,9 +352,9 @@ def create_map2(zipcode, viewpoint, server_ip):
                     <b>{row['Px']}(景點X座標)</b><br>
                     <b>{row['Py']}(景點Y座標)</b><br>
                     <b>{row['Changetime']}(資料異動時間)</b><br><br>
-                    <button style="width: 100%; ;" onclick="openWindow('upload', '{id_}', '{name}', '{server_ip}')">上傳照片</button><br><br>
-                    <button style="width: 100%; margin-top: 5px;" onclick="openWindow('download', '{id_}', '{name}', '{server_ip}')">下載照片</button><br><br>
-                    <button style="width: 100%; margin-top: 5px;" onclick="openWindow('edit', '{id_}', '{name}', '{server_ip}')">填寫相關資訊</button>
+                    <button style="width: 100%;" onclick="openWindow('upload', '{id_}', '{name}', '{server_ip}')">上傳照片</button><br><br>
+                    <button style="width: 100%;" onclick="openWindow('download', '{id_}', '{name}', '{server_ip}')">下載照片</button><br><br>
+                    <button style="width: 100%;" onclick="openWindow('edit', '{id_}', '{name}', '{server_ip}')">填寫相關資訊</button>
                     <script>
                         function openWindow(action, locationId, name, server_ip) {{
                             let url = '';
@@ -430,10 +430,11 @@ def create_map2(zipcode, viewpoint, server_ip):
             ##
             #print("(create_map1) popup_html= ", popup_html)
             #iframe = folium.IFrame(popup_html, width=150, height=150)
-            # iframe = branca.element.IFrame(popup_html, width="100%", height="100%")
+            #iframe = branca.element.IFrame(popup_html, width="100%", height="100%")
+            #iframe = branca.element.IFrame(popup_html)
             iframe = branca.element.IFrame(popup_html, width=200, height=180)
-            # popup = folium.Popup(iframe, max_width="auto")
-            popup = folium.Popup(iframe, max_width=200)
+            popup = folium.Popup(iframe, max_width="auto")
+            #popup = folium.Popup(iframe, max_width=200, max_height=180)
             #popup = folium.Popup(popup_html, max_width='auto')
             #popup = folium.Popup(popup_html, max_width=300)
             ##
