@@ -18,6 +18,9 @@
     iframe#map {
         height: 400px !important;
     }
+    #popup-content {
+        transform: scale(0.8, 0.8);
+    }
 }
 
 /* 手機進一步縮小時的細部優化 */
@@ -34,11 +37,14 @@
         height: 300px !important;
     }
 
-    #popup-content {
+    /* #popup-content {
         font-size: 13px;
-    }
-    #popup-content button {
+    } */
+    /* #popup-content button {
         font-size: 13px;
         padding: 6px 10px;
+    } */
+    #popup-content {
+        transform: scale(0.7, 0.7);
     }
 }
