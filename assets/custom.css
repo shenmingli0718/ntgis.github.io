@@ -5,6 +5,9 @@
         border: 2px solid red;
         margin: 2px;
     }
+    #popup-content {
+        box-shadow: 0px 30px 18px -8px blue;
+    }
 }
 /* 針對小於 992px 螢幕（平板與手機）做響應式調整 */
 @media (max-width: 991.98px) {
@@ -20,6 +23,7 @@
     }
     #popup-content {
         transform: scale(0.8, 0.8);
+        box-shadow: 0px 30px 18px -8px red;
     }
 }
 
@@ -46,5 +50,6 @@
     } */
     #popup-content {
         transform: scale(0.7, 0.7);
+        box-shadow: 0px 30px 18px -8px green;
     }
 }
