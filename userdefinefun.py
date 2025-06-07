@@ -355,7 +355,30 @@ def create_map2(zipcode, viewpoint, server_ip):
                     <button style="width: 100%;" onclick="openWindow('upload', '{id_}', '{name}', '{server_ip}')">上傳照片</button><br><br>
                     <button style="width: 100%;" onclick="openWindow('download', '{id_}', '{name}', '{server_ip}')">下載照片</button><br><br>
                     <button style="width: 100%;" onclick="openWindow('edit', '{id_}', '{name}', '{server_ip}')">填寫相關資訊</button>
-                    <script>
+                <style>
+                /* 手機:地圖標記popup縮小比例 */
+                @media (min-width: 576px) {{
+                    #popup-content {{
+                    transform: scale(0.6, 0.6);
+                    background: red;
+                    }}
+                }}
+                /* 平板:地圖標記popup縮小比例 */
+                @media (min-width: 768px) {{
+                    #popup-content {{
+                    transform: scale(0.8, 0.8);
+                    background: orange;
+                    }}
+                }}
+                /* 電腦螢幕:地圖標記popup縮小比例 */
+                @media (min-width: 992px) {{
+                    #popup-content {{
+                    transform: scale(1.0, 1.0);
+                    background: green;
+                    }}
+                }}
+                </style>
+                <script>
                         function openWindow(action, locationId, name, server_ip) {{
                             let url = '';
                             // let customedomain='https://ntgisgithubio-production.up.railway.app';  //114/01/21 modified
@@ -433,9 +456,9 @@ def create_map2(zipcode, viewpoint, server_ip):
             #iframe = branca.element.IFrame(popup_html, width="100%", height="100%")
             #iframe = branca.element.IFrame(popup_html)
             # iframe = branca.element.IFrame(popup_html, width=200, height=180)
-            iframe = branca.element.IFrame(popup_html, width=250, height=350)
-            # popup = folium.Popup(iframe, max_width="auto")
-            popup = folium.Popup(iframe, max_width=300)
+            iframe = branca.element.IFrame(popup_html, width=200, height=220)
+            popup = folium.Popup(iframe, max_width="auto")
+            # popup = folium.Popup(iframe, max_width=300)
             #popup = folium.Popup(iframe, max_width=200, max_height=180)
             #popup = folium.Popup(popup_html, max_width='auto')
             #popup = folium.Popup(popup_html, max_width=300)
