@@ -456,8 +456,8 @@ def create_map2(zipcode, viewpoint, server_ip):
             #iframe = branca.element.IFrame(popup_html, width="100%", height="100%")
             #iframe = branca.element.IFrame(popup_html)
             # iframe = branca.element.IFrame(popup_html, width=200, height=180)
-            iframe = branca.element.IFrame(popup_html, width=200, height=220)
-            popup = folium.Popup(iframe, max_width="auto")
+            # iframe = branca.element.IFrame(popup_html, width=200, height=220)
+            # popup = folium.Popup(iframe, max_width="auto")
             # popup = folium.Popup(iframe, max_width=300)
             #popup = folium.Popup(iframe, max_width=200, max_height=180)
             #popup = folium.Popup(popup_html, max_width='auto')
@@ -467,7 +467,8 @@ def create_map2(zipcode, viewpoint, server_ip):
             ## mymap.add_child(marker_cluster)
             ###
             ## Marker(location = [row['Py'], row['Px']], popup = row['Name'], icon=folium.Icon(color="green")).add_to(mymap)
-            Marker(location = [row['Py'], row['Px']], popup =popup, icon=folium.Icon(color="red")).add_to(mymap)
+            # Marker(location = [row['Py'], row['Px']], popup =popup, icon=folium.Icon(color="red")).add_to(mymap)
+            Marker(location = [row['Py'], row['Px']], popup =popup_html, icon=folium.Icon(color="red")).add_to(mymap)
     #
     #vp_dropdown_options = [
     #{'label': f"{x+1} {row['Name']}", 'value': row['Name']}
