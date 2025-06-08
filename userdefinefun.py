@@ -347,7 +347,7 @@ def create_map2(zipcode, viewpoint, server_ip):
             popup_html = f"""
                 <style>
                 /* 手機:地圖標記popup縮小比例 */
-                @media (min-width: 576px) {{
+                @media (min-width: 150px) {{
                     #popup-content {{
                         transform: scale(0.6, 0.6);
                         background: red;
