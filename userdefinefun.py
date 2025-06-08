@@ -350,21 +350,21 @@ def create_map2(zipcode, viewpoint, server_ip):
                 @media (min-width: 576px) {{
                     #popup-content {{
                         transform: scale(0.6, 0.6);
-                        box-shadow: 0px 30px 18px -8px red;
+                        background: red;
                     }}
                 }}
                 /* 平板:地圖標記popup縮小比例 */
                 @media (min-width: 768px) {{
                     #popup-content {{
                         transform: scale(0.8, 0.8);
-                        box-shadow: 0px 30px 18px -8px orange;
+                        background: orange;
                     }}
                 }}
                 /* 電腦螢幕:地圖標記popup縮小比例 */
                 @media (min-width: 992px) {{
                     #popup-content {{
                         transform: scale(1.0, 1.0);
-                        box-shadow: 0px 30px 18px -8px green;
+                        background: green;
                     }}
                 }}
                 </style>
