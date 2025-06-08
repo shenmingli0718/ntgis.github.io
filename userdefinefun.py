@@ -345,17 +345,6 @@ def create_map2(zipcode, viewpoint, server_ip):
             ##    <div id="popup-content" style="width: auto; max-width: 60vx; max-height: 60vh; overflow-y: auto;">
             # popup_html = f"""
             popup_html = f"""
-                <div id="popup-content" style="max-width: 98vw; max-height: 98vh; font-size: 14px; position: relative;">
-                    <b>{name}</b><br>
-                    <b>{row['Opentime']}</b><br>
-                    <b>{row['Add']}</b><br>
-                    <b>{row['Tel']}</b><br>
-                    <b>{row['Px']}(景點X座標)</b><br>
-                    <b>{row['Py']}(景點Y座標)</b><br>
-                    <b>{row['Changetime']}(資料異動時間)</b><br><br>
-                    <button style="width: 100%;" onclick="openWindow('upload', '{id_}', '{name}', '{server_ip}')">上傳照片</button><br><br>
-                    <button style="width: 100%;" onclick="openWindow('download', '{id_}', '{name}', '{server_ip}')">下載照片</button><br><br>
-                    <button style="width: 100%;" onclick="openWindow('edit', '{id_}', '{name}', '{server_ip}')">填寫相關資訊</button>
                 <style>
                 /* 手機:地圖標記popup縮小比例 */
                 @media (min-width: 576px) {{
@@ -379,6 +368,17 @@ def create_map2(zipcode, viewpoint, server_ip):
                     }}
                 }}
                 </style>
+                <div id="popup-content" style="max-width: 98vw; max-height: 98vh; font-size: 14px; position: relative;">
+                    <b>{name}</b><br>
+                    <b>{row['Opentime']}</b><br>
+                    <b>{row['Add']}</b><br>
+                    <b>{row['Tel']}</b><br>
+                    <b>{row['Px']}(景點X座標)</b><br>
+                    <b>{row['Py']}(景點Y座標)</b><br>
+                    <b>{row['Changetime']}(資料異動時間)</b><br><br>
+                    <button style="width: 100%;" onclick="openWindow('upload', '{id_}', '{name}', '{server_ip}')">上傳照片</button><br><br>
+                    <button style="width: 100%;" onclick="openWindow('download', '{id_}', '{name}', '{server_ip}')">下載照片</button><br><br>
+                    <button style="width: 100%;" onclick="openWindow('edit', '{id_}', '{name}', '{server_ip}')">填寫相關資訊</button>
                 <script>
                         function openWindow(action, locationId, name, server_ip) {{
                             let url = '';
