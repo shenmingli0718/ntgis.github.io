@@ -344,7 +344,7 @@ def create_map2(zipcode, viewpoint, server_ip):
             ## popup_html = f"""
             ##    <div id="popup-content" style="width: auto; max-width: 60vx; max-height: 60vh; overflow-y: auto;">
             # popup_html = f"""
-            popup_html = """
+            popup_html = f"""
                 <div id="popup-content" style="max-width: 98vw; max-height: 98vh; font-size: 14px; position: relative;">
                     <b>{name}</b><br>
                     <b>{row['Opentime']}</b><br>
