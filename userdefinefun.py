@@ -286,7 +286,7 @@ def create_map1(zipcode, server_ip):
     #
     return map_html, error_msg, vp_dropdown_options
 
-def create_map2(zipcode, viewpoint, server_ip):
+def create_map2(zipcode, viewpoint, server_ip, win_width):
     import pandas as pd
     import geopandas as gpd
     import folium
@@ -352,21 +352,21 @@ def create_map2(zipcode, viewpoint, server_ip):
                         transform: scale(0.6, 0.6);
                         background: red;
                     }}
-                }}
+                }} */
                 /* 平板:地圖標記popup縮小比例 */
-                @media (min-width: 768px) {{
+                /* @media (min-width: 768px) {{
                     #popup-content {{
                         transform: scale(0.8, 0.8);
                         background: orange;
                     }}
-                }}
+                }} */
                 /* 電腦螢幕:地圖標記popup縮小比例 */
-                @media (min-width: 992px) {{
+                /* @media (min-width: 992px) {{
                     #popup-content {{
                         transform: scale(1.0, 1.0);
                         background: green;
                     }}
-                }}
+                }} */
                 </style>
                 <div id="popup-content" style="max-width: 98vw; max-height: 98vh; font-size: 14px; position: relative;">
                     <b>{name}</b><br>
@@ -457,9 +457,9 @@ def create_map2(zipcode, viewpoint, server_ip):
             #iframe = branca.element.IFrame(popup_html, width="100%", height="100%")
             #iframe = branca.element.IFrame(popup_html)
             # iframe = branca.element.IFrame(popup_html, width=200, height=180)
-            iframe = branca.element.IFrame(popup_html, width=200, height=220)
+            iframe = branca.element.IFrame(popup_html, width=win_width*30/100, height=220)
             # popup = folium.Popup(iframe, max_width="auto")
-            popup = folium.Popup(iframe, max_width=200)
+            popup = folium.Popup(iframe, max_width=win_width*30/100)
             # popup = folium.Popup(iframe, max_width=300)
             #popup = folium.Popup(iframe, max_width=200, max_height=180)
             #popup = folium.Popup(popup_html, max_width='auto')
