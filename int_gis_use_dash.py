@@ -196,7 +196,7 @@ app.clientside_callback(
     Input('window-width', 'data')
 )
 def update_width(w):
-    return str(w or 800), f"Window width: {w}"
+    return  f"視窗寬度: {w}"
 
 # Callback 更新地圖
 @app.callback(
