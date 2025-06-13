@@ -205,7 +205,6 @@ def update_width(w):
     #[Input('generate-map-btn', 'n_clicks')],
     #[Input('latitude-input', 'value'), Input('longitude-input', 'value')]
     Input('window-width', 'data'),
-    Input('generate-map-btn1', 'n_clicks'),
     Input('generate-map-btn1', 'n_clicks'),  # 按鈕點擊事件觸發
                                              # 使用 Input 監聽按鈕點擊事件：按鈕的點擊事件觸發地圖更新。
     Input('generate-map-btn2', 'n_clicks'), 
