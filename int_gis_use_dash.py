@@ -138,6 +138,7 @@ app.layout = dbc.Container([
             html.Div(id='page-content')
             ]),
             #
+            html.Div(id='debug'),
             html.H4("互動式 GIS 系統", className='text-center mb-4'),
             dbc.Label("請輸入世界各地任一地點名稱:"),
             dcc.Input(id='name-input', type='text', value=""),            
@@ -173,10 +174,29 @@ app.layout = dbc.Container([
             html.Iframe(id='map', width='100%', height='600'),
         ], width=9, className="dash-col-right"),
         dcc.Store(id='selected-location'),  # 儲存選擇的景點資訊
-        dcc.Store(id='map-update-data')  # 用于触发地图更新的存储组件
-        
+        dcc.Store(id='map-update-data'),  # 用于触发地图更新的存储组件
+        dcc.Store(id='window-width'),
+        dcc.Interval(id='dummy', interval=1000, n_intervals=0)  # 一開始觸發用   
     ])
 ], fluid=True)
+
+app.clientside_callback(
+    """
+    function(n) {
+        let width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+        return width;
+    }
+    """,
+    Output('window-width', 'data'),
+    Input('dummy', 'n_intervals')
+)
+
+@app.callback(
+    Output('debug', 'children'),
+    Input('window-width', 'data')
+)
+def update_width(w):
+    return str(w or 800), f"Window width: {w}"
 
 # Callback 更新地圖
 @app.callback(
