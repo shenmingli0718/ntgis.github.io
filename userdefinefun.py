@@ -62,7 +62,7 @@ def get_tourist_data():
         print("Failed to fetch 新北觀光旅遊檔")
         return pd.DataFrame()
 
-def create_vp_dropdown_options(zipcode):
+def create_vp_dropdown_options(zipcode, width):
     import pandas as pd
     from dash import no_update
 #
@@ -73,7 +73,7 @@ def create_vp_dropdown_options(zipcode):
     {'label': f"{idx+1} {row['Name']}", 'value': row['Name']}
     for idx, row in selected_df.iterrows()
     ]
-    return no_update, no_update, vp_dropdown_options
+    return no_update, no_update, vp_dropdown_options, f"視窗寬度: {width}"
     #
 ##
 def get_unique_zip_area_df():
@@ -284,7 +284,7 @@ def create_map1(zipcode, server_ip, width):
     #
     print("trace 2 on create_map1")
     #
-    return map_html, error_msg, vp_dropdown_options
+    return map_html, error_msg, vp_dropdown_options, f"視窗寬度: {width}"
 
 def create_map2(zipcode, viewpoint, server_ip, width):
     import pandas as pd
@@ -496,7 +496,7 @@ def create_map2(zipcode, viewpoint, server_ip, width):
     map_html = map_io.getvalue().decode()
 
     #return map_html, error_msg, vp_dropdown_options
-    return map_html, error_msg, no_update    # vp_dropdown_options 保持現值，不改變
+    return map_html, error_msg, no_update, f"視窗寬度: {width}"    # vp_dropdown_options 保持現值，不改變
     #return map_html, error_msg 
     
 

@@ -127,7 +127,7 @@ def create_map(name, width):
     mymap.save(map_io, close_file=False)
     map_html = map_io.getvalue().decode()
 
-    return map_html, error_msg, []
+    return map_html, error_msg, [], f"視窗寬度: {width}"
  
 
 # App Layout
@@ -202,7 +202,7 @@ def update_width(w):
 # Callback 更新地圖
 @app.callback(
     [Output('map', 'srcDoc'), Output('error-message', 'children'),
-     Output('viewpoint-dropdown', 'options')],  # 更新地圖和錯誤訊息
+     Output('viewpoint-dropdown', 'options'), Output('debug', 'children', allow_duplicate=True)],  # 更新地圖和錯誤訊息
     #[Input('generate-map-btn', 'n_clicks')],
     #[Input('latitude-input', 'value'), Input('longitude-input', 'value')]
     Input('window-width', 'data'),
@@ -225,7 +225,7 @@ def update_map_and_dropdown(width, map_clicks1, map_clicks2, zipcode, name, view
     triggered_input = ctx.triggered[0]['prop_id'].split('.')[0]
     # 如果是 zip-area-dropdown 觸發的回調，更新 viewpoint-dropdown 的選項
     if triggered_input == 'zip-area-dropdown':
-        return create_vp_dropdown_options(zipcode) 
+        return create_vp_dropdown_options(zipcode, width) 
     elif triggered_input in ['generate-map-btn1', 'generate-map-btn2']:
     # 當按鈕點擊後，根據 name 和 zipcode 判斷要生成哪種地圖
         if name:
@@ -239,7 +239,7 @@ def update_map_and_dropdown(width, map_clicks1, map_clicks2, zipcode, name, view
                 else:
                     return create_map2(zipcode,viewpoint,server_ip,width)
         else:
-            return no_update, no_update, no_update   # 必須
+            return no_update, no_update, no_update, f"視窗寬度: {width}"   # 必須
     else:
         # 初始狀態，當 n_clicks 為 None 時顯示默認地圖
         name = name if name else "石碇區石碇里"  # 預設地點
