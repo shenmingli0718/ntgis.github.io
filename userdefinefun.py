@@ -123,7 +123,7 @@ def calculate_center_point(data,selected_zipcode):
     return selected_center
     
 ###
-def create_map1(zipcode, server_ip):
+def create_map1(zipcode, server_ip, width):
     import pandas as pd
     import geopandas as gpd
     import folium
@@ -284,9 +284,9 @@ def create_map1(zipcode, server_ip):
     #
     print("trace 2 on create_map1")
     #
-    return map_html, error_msg, vp_dropdown_options
+    return map_html, error_msg, vp_dropdown_options, f"視窗寬度: {width}"
 
-def create_map2(zipcode, viewpoint, server_ip, win_width):
+def create_map2(zipcode, viewpoint, server_ip, width):
     import pandas as pd
     import geopandas as gpd
     import folium
@@ -457,9 +457,9 @@ def create_map2(zipcode, viewpoint, server_ip, win_width):
             #iframe = branca.element.IFrame(popup_html, width="100%", height="100%")
             #iframe = branca.element.IFrame(popup_html)
             # iframe = branca.element.IFrame(popup_html, width=200, height=180)
-            iframe = branca.element.IFrame(popup_html, width=win_width*30/100, height=220)
+            iframe = branca.element.IFrame(popup_html, width=width*30/100, height=220)
             # popup = folium.Popup(iframe, max_width="auto")
-            popup = folium.Popup(iframe, max_width=win_width*30/100)
+            popup = folium.Popup(iframe, max_width=width*30/100)
             # popup = folium.Popup(iframe, max_width=300)
             #popup = folium.Popup(iframe, max_width=200, max_height=180)
             #popup = folium.Popup(popup_html, max_width='auto')
@@ -496,7 +496,7 @@ def create_map2(zipcode, viewpoint, server_ip, win_width):
     map_html = map_io.getvalue().decode()
 
     #return map_html, error_msg, vp_dropdown_options
-    return map_html, error_msg, no_update     # vp_dropdown_options 保持現值，不改變
+    return map_html, error_msg, no_update, f"視窗寬度: {width}"     # vp_dropdown_options 保持現值，不改變
     #return map_html, error_msg 
     
 

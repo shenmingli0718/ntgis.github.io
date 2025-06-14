@@ -63,7 +63,7 @@ server_ip = get_host_ip()
 # 初始化地圖函數
 ##
 # 自定義樣式函數
-def create_map(name):
+def create_map(name, width):
     
     # 讀取大台北鄉鎮市區界圖shpe file(含台北市、新北市)
     # Big_Taipei_data = gpd.read_file('static/shapefiles/Taipei.shp', encoding='utf-8')
@@ -127,7 +127,8 @@ def create_map(name):
     mymap.save(map_io, close_file=False)
     map_html = map_io.getvalue().decode()
 
-    return map_html, error_msg, [] 
+    return map_html, error_msg, [], f"視窗寬度: {width}"
+ 
 
 # App Layout
 app.layout = dbc.Container([
@@ -201,7 +202,7 @@ def update_width(w):
 # Callback 更新地圖
 @app.callback(
     [Output('map', 'srcDoc'), Output('error-message', 'children'),
-     Output('viewpoint-dropdown', 'options')],  # 更新地圖和錯誤訊息
+     Output('viewpoint-dropdown', 'options'), Output('debug', 'children')],  # 更新地圖和錯誤訊息
     #[Input('generate-map-btn', 'n_clicks')],
     #[Input('latitude-input', 'value'), Input('longitude-input', 'value')]
     Input('window-width', 'data'),
@@ -229,11 +230,11 @@ def update_map_and_dropdown(width, map_clicks1, map_clicks2, zipcode, name, view
     # 當按鈕點擊後，根據 name 和 zipcode 判斷要生成哪種地圖
         if name:
             if map_clicks1 is not None:
-                return create_map(name)  # 優先使用 name
+                return create_map(name, width)  # 優先使用 name
         elif zipcode:
             if map_clicks2 is not None:
                 if not viewpoint: 
-                    return create_map1(zipcode,server_ip)
+                    return create_map1(zipcode,server_ip,width)
                     print("trace 1 on create_map1")
                 else:
                     return create_map2(zipcode,viewpoint,server_ip,width)
@@ -242,7 +243,7 @@ def update_map_and_dropdown(width, map_clicks1, map_clicks2, zipcode, name, view
     else:
         # 初始狀態，當 n_clicks 為 None 時顯示默認地圖
         name = name if name else "石碇區石碇里"  # 預設地點
-        return create_map(name)
+        return create_map(name, width)
             
                 
     #    else:
