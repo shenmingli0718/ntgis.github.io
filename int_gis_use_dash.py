@@ -211,8 +211,9 @@ def update_width(w):
     Input('generate-map-btn2', 'n_clicks'), 
     Input('zip-area-dropdown', 'value'),
     State('name-input', 'value'),   # 名稱或地址 # 使用 State 來儲存緯度和經度數值：避免在按鈕點擊之前緯度和經度變化時觸發回調。
-    State('viewpoint-dropdown', 'value')
+    State('viewpoint-dropdown', 'value'),
     #state('viewpoint-dropdown', 'value')
+    prevent_initial_call=True
 )
 ##
 def update_map_and_dropdown(width, map_clicks1, map_clicks2, zipcode, name, viewpoint):
