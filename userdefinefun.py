@@ -284,7 +284,7 @@ def create_map1(zipcode, server_ip, width):
     #
     print("trace 2 on create_map1")
     #
-    return map_html, error_msg, vp_dropdown_options, f"視窗寬度: {width}"
+    return map_html, error_msg, vp_dropdown_options
 
 def create_map2(zipcode, viewpoint, server_ip, width):
     import pandas as pd
@@ -496,7 +496,7 @@ def create_map2(zipcode, viewpoint, server_ip, width):
     map_html = map_io.getvalue().decode()
 
     #return map_html, error_msg, vp_dropdown_options
-    return map_html, error_msg, no_update, f"視窗寬度: {width}"     # vp_dropdown_options 保持現值，不改變
+    return map_html, error_msg, no_update    # vp_dropdown_options 保持現值，不改變
     #return map_html, error_msg 
     
 

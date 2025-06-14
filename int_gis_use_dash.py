@@ -127,7 +127,7 @@ def create_map(name, width):
     mymap.save(map_io, close_file=False)
     map_html = map_io.getvalue().decode()
 
-    return map_html, error_msg, [], f"視窗寬度: {width}"
+    return map_html, error_msg, []
  
 
 # App Layout
@@ -202,7 +202,7 @@ def update_width(w):
 # Callback 更新地圖
 @app.callback(
     [Output('map', 'srcDoc'), Output('error-message', 'children'),
-     Output('viewpoint-dropdown', 'options'), Output('debug', 'children')],  # 更新地圖和錯誤訊息
+     Output('viewpoint-dropdown', 'options')],  # 更新地圖和錯誤訊息
     #[Input('generate-map-btn', 'n_clicks')],
     #[Input('latitude-input', 'value'), Input('longitude-input', 'value')]
     Input('window-width', 'data'),
