@@ -134,14 +134,14 @@ def create_map(name):
 app.layout = dbc.Container([
     dbc.Row([
         dbc.Col([
-            # html.P(id='window-size-display', children=[
-            # "目前視窗寬度: ",
-            # html.Span(id='width'),
-            # ]),
-            html.Div([
-                html.Span("目前視窗寬度: "),
-                html.Span(id='width',value=0)   
+            html.P(id='window-size-display', children=[
+            "目前視窗寬度: ",
+            html.Span(id='width'),
             ]),
+            # html.Div([
+            #     html.Span("目前視窗寬度: "),
+            #     html.Span(id='width',value=0)   
+            # ]),
             html.Div([
             dcc.Location(id='url', refresh=False),
             html.Div(id='page-content')
@@ -182,8 +182,8 @@ app.layout = dbc.Container([
             html.Iframe(id='map', width='100%', height='600'),
         ], width=9, className="dash-col-right"),
         dcc.Store(id='selected-location'),  # 儲存選擇的景點資訊
-        dcc.Store(id='map-update-data')  # 用于触发地图更新的存储组件
-        
+        dcc.Store(id='map-update-data'),  # 用于触发地图更新的存储组件
+        dcc.store(id='st-width') # 儲存視窗寬度
     ])
 ], fluid=True)
 
@@ -197,6 +197,7 @@ function dash_funtion(){
 
         // Update the HTML elements with the window size information
         document.getElementById('width').textContent = width;
+        document.getElementById('st-width').textContent = width;
     }
 
     // Initial update of the window size display
@@ -209,7 +210,7 @@ function dash_funtion(){
 """,
     # Output("window-size-display", 'children'),
     # Input("window-size-display", 'children')
-    Output("width", 'value'),
+    [Output("width", 'value'), Output("st-width", 'value')],
     Input("width", 'value')
 )
 
