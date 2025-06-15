@@ -63,7 +63,7 @@ server_ip = get_host_ip()
 # 初始化地圖函數
 ##
 # 自定義樣式函數
-def create_map(name, width):
+def create_map(name):
     
     # 讀取大台北鄉鎮市區界圖shpe file(含台北市、新北市)
     # Big_Taipei_data = gpd.read_file('static/shapefiles/Taipei.shp', encoding='utf-8')
@@ -127,8 +127,7 @@ def create_map(name, width):
     mymap.save(map_io, close_file=False)
     map_html = map_io.getvalue().decode()
 
-    return map_html, error_msg, [], f"視窗寬度: {width}"
- 
+    return map_html, error_msg, [] 
 
 # App Layout
 app.layout = dbc.Container([
@@ -139,7 +138,6 @@ app.layout = dbc.Container([
             html.Div(id='page-content')
             ]),
             #
-            html.Div(id='debug'),
             html.H4("互動式 GIS 系統", className='text-center mb-4'),
             dbc.Label("請輸入世界各地任一地點名稱:"),
             dcc.Input(id='name-input', type='text', value=""),            
@@ -175,48 +173,27 @@ app.layout = dbc.Container([
             html.Iframe(id='map', width='100%', height='600'),
         ], width=9, className="dash-col-right"),
         dcc.Store(id='selected-location'),  # 儲存選擇的景點資訊
-        dcc.Store(id='map-update-data'),  # 用于触发地图更新的存储组件
-        dcc.Store(id='window-width'),
-        dcc.Interval(id='dummy', interval=1000, n_intervals=0)  # 一開始觸發用   
+        dcc.Store(id='map-update-data')  # 用于触发地图更新的存储组件
+        
     ])
 ], fluid=True)
-
-app.clientside_callback(
-    """
-    function(n) {
-        let width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-        return width;
-    }
-    """,
-    Output('window-width', 'data'),
-    Input('dummy', 'n_intervals')
-)
-
-@app.callback(
-    Output('debug', 'children'),
-    Input('window-width', 'data')
-)
-def update_width(w):
-    return  f"視窗寬度: {w}"
 
 # Callback 更新地圖
 @app.callback(
     [Output('map', 'srcDoc'), Output('error-message', 'children'),
-     Output('viewpoint-dropdown', 'options'), Output('debug', 'children', allow_duplicate=True)],  # 更新地圖和錯誤訊息
+     Output('viewpoint-dropdown', 'options')],  # 更新地圖和錯誤訊息
     #[Input('generate-map-btn', 'n_clicks')],
     #[Input('latitude-input', 'value'), Input('longitude-input', 'value')]
-    Input('window-width', 'data'),
     Input('generate-map-btn1', 'n_clicks'),  # 按鈕點擊事件觸發
                                              # 使用 Input 監聽按鈕點擊事件：按鈕的點擊事件觸發地圖更新。
     Input('generate-map-btn2', 'n_clicks'), 
     Input('zip-area-dropdown', 'value'),
     State('name-input', 'value'),   # 名稱或地址 # 使用 State 來儲存緯度和經度數值：避免在按鈕點擊之前緯度和經度變化時觸發回調。
-    State('viewpoint-dropdown', 'value'),
+    State('viewpoint-dropdown', 'value')
     #state('viewpoint-dropdown', 'value')
-    prevent_initial_call=True
 )
 ##
-def update_map_and_dropdown(width, map_clicks1, map_clicks2, zipcode, name, viewpoint):
+def update_map_and_dropdown(map_clicks1, map_clicks2, zipcode, name, viewpoint):
     # ***** Initialize default values
     #map_html = "<p>No map data available.</p>"  # Default or empty map HTML
     #error_msg = ""  # No error initially
@@ -226,25 +203,25 @@ def update_map_and_dropdown(width, map_clicks1, map_clicks2, zipcode, name, view
     triggered_input = ctx.triggered[0]['prop_id'].split('.')[0]
     # 如果是 zip-area-dropdown 觸發的回調，更新 viewpoint-dropdown 的選項
     if triggered_input == 'zip-area-dropdown':
-        return create_vp_dropdown_options(zipcode, width) 
+        return create_vp_dropdown_options(zipcode) 
     elif triggered_input in ['generate-map-btn1', 'generate-map-btn2']:
     # 當按鈕點擊後，根據 name 和 zipcode 判斷要生成哪種地圖
         if name:
             if map_clicks1 is not None:
-                return create_map(name, width)  # 優先使用 name
+                return create_map(name)  # 優先使用 name
         elif zipcode:
             if map_clicks2 is not None:
                 if not viewpoint: 
-                    return create_map1(zipcode,server_ip,width)
+                    return create_map1(zipcode,server_ip)
                     print("trace 1 on create_map1")
                 else:
-                    return create_map2(zipcode,viewpoint,server_ip,width)
+                    return create_map2(zipcode,viewpoint,server_ip)
         else:
-            return no_update, no_update, no_update, f"視窗寬度: {width}"   # 必須
+            return no_update, no_update, no_update   # 必須
     else:
         # 初始狀態，當 n_clicks 為 None 時顯示默認地圖
         name = name if name else "石碇區石碇里"  # 預設地點
-        return create_map(name, width)
+        return create_map(name)
             
                 
     #    else:
