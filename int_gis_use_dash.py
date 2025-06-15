@@ -214,6 +214,7 @@ function dash_funtion(){
      Output('viewpoint-dropdown', 'options')],  # 更新地圖和錯誤訊息
     #[Input('generate-map-btn', 'n_clicks')],
     #[Input('latitude-input', 'value'), Input('longitude-input', 'value')]
+    Input('width', 'data'),
     Input('generate-map-btn1', 'n_clicks'),  # 按鈕點擊事件觸發
                                              # 使用 Input 監聽按鈕點擊事件：按鈕的點擊事件觸發地圖更新。
     Input('generate-map-btn2', 'n_clicks'), 
@@ -223,7 +224,7 @@ function dash_funtion(){
     #state('viewpoint-dropdown', 'value')
 )
 ##
-def update_map_and_dropdown(map_clicks1, map_clicks2, zipcode, name, viewpoint):
+def update_map_and_dropdown(win_width, map_clicks1, map_clicks2, zipcode, name, viewpoint):
     # ***** Initialize default values
     #map_html = "<p>No map data available.</p>"  # Default or empty map HTML
     #error_msg = ""  # No error initially
@@ -245,7 +246,7 @@ def update_map_and_dropdown(map_clicks1, map_clicks2, zipcode, name, viewpoint):
                     return create_map1(zipcode,server_ip)
                     print("trace 1 on create_map1")
                 else:
-                    return create_map2(zipcode,viewpoint,server_ip)
+                    return create_map2(zipcode,viewpoint,server_ip,win_width)
         else:
             return no_update, no_update, no_update   # 必須
     else:

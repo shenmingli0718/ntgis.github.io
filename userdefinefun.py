@@ -286,7 +286,7 @@ def create_map1(zipcode, server_ip):
     #
     return map_html, error_msg, vp_dropdown_options
 
-def create_map2(zipcode, viewpoint, server_ip):
+def create_map2(zipcode, viewpoint, server_ip, win_width):
     import pandas as pd
     import geopandas as gpd
     import folium
@@ -457,9 +457,11 @@ def create_map2(zipcode, viewpoint, server_ip):
             #iframe = branca.element.IFrame(popup_html, width="100%", height="100%")
             #iframe = branca.element.IFrame(popup_html)
             # iframe = branca.element.IFrame(popup_html, width=200, height=180)
-            iframe = branca.element.IFrame(popup_html, width=200, height=220)
+            # iframe = branca.element.IFrame(popup_html, width=200, height=220)
+            iframe = branca.element.IFrame(popup_html, width=win_width*0.25, height=220)
             # popup = folium.Popup(iframe, max_width="auto")
-            popup = folium.Popup(iframe, max_width=200)
+            # popup = folium.Popup(iframe, max_width=200)
+            popup = folium.Popup(iframe, max_width=win_width*0.25)
             # popup = folium.Popup(iframe, max_width=300)
             #popup = folium.Popup(iframe, max_width=200, max_height=180)
             #popup = folium.Popup(popup_html, max_width='auto')
