@@ -183,7 +183,7 @@ app.layout = dbc.Container([
         ], width=9, className="dash-col-right"),
         dcc.Store(id='selected-location'),  # 儲存選擇的景點資訊
         dcc.Store(id='map-update-data'),  # 用于触发地图更新的存储组件
-        dcc.store(id='st-width') # 儲存視窗寬度
+        dcc.Store(id='st-width') # 儲存視窗寬度
     ])
 ], fluid=True)
 
