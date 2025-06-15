@@ -134,9 +134,13 @@ def create_map(name):
 app.layout = dbc.Container([
     dbc.Row([
         dbc.Col([
-            html.P(id='window-size-display', children=[
-            "目前視窗寬度: ",
-            html.Span(id='width'),
+            # html.P(id='window-size-display', children=[
+            # "目前視窗寬度: ",
+            # html.Span(id='width'),
+            # ]),
+            html.Div([
+                html.Span("目前視窗寬度: "),
+                html.Span(id='width')    
             ]),
             html.Div([
             dcc.Location(id='url', refresh=False),
@@ -203,8 +207,10 @@ function dash_funtion(){
     return window.dash_clientside.no_update
 }
 """,
-    Output("window-size-display", 'children'),
-    Input("window-size-display", 'children')
+    # Output("window-size-display", 'children'),
+    # Input("window-size-display", 'children')
+    Output("width", 'value'),
+    Input("width", 'value')
 )
 
 
