@@ -140,7 +140,7 @@ app.layout = dbc.Container([
             # ]),
             html.Div([
                 html.Span("目前視窗寬度: "),
-                html.Span(id='width')    
+                html.Span(id='width',value=0)   
             ]),
             html.Div([
             dcc.Location(id='url', refresh=False),
