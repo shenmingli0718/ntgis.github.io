@@ -127,7 +127,8 @@ def create_map(name):
     mymap.save(map_io, close_file=False)
     map_html = map_io.getvalue().decode()
 
-    return map_html, error_msg, [] 
+    # return map_html, error_msg, []
+    return map_html, error_msg, no_update 
 
 # App Layout
 app.layout = dbc.Container([
