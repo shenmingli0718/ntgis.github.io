@@ -1,5 +1,5 @@
 import dash
-from dash import dcc, html
+from dash import dcc, html,  clientside_callback
 from dash.dependencies import Input, Output, State
 import folium
 from folium import Marker
@@ -133,6 +133,10 @@ def create_map(name):
 app.layout = dbc.Container([
     dbc.Row([
         dbc.Col([
+            html.P(id='window-size-display', children=[
+            "目前視窗寬度: ",
+            html.Span(id='width'),
+            ]),
             html.Div([
             dcc.Location(id='url', refresh=False),
             html.Div(id='page-content')
@@ -177,6 +181,31 @@ app.layout = dbc.Container([
         
     ])
 ], fluid=True)
+
+clientside_callback(
+"""
+// javascript code
+function dash_funtion(){
+    function updateWindowSize() {
+        // Get the innerWidth and innerHeight of the browser window
+        var width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+
+        // Update the HTML elements with the window size information
+        document.getElementById('width').textContent = width;
+    }
+
+    // Initial update of the window size display
+    updateWindowSize();
+
+    // Attach an event listener to update the window size display on window resize
+    window.addEventListener('resize', updateWindowSize);
+    return window.dash_clientside.no_update
+}
+""",
+    Output("window-size-display", 'children'),
+    Input("window-size-display", 'children')
+)
+
 
 # Callback 更新地圖
 @app.callback(
