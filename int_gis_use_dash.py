@@ -221,7 +221,7 @@ function dash_funtion(){
      Output('viewpoint-dropdown', 'options')],  # 更新地圖和錯誤訊息
     #[Input('generate-map-btn', 'n_clicks')],
     #[Input('latitude-input', 'value'), Input('longitude-input', 'value')]
-    Input('width', 'value'),
+    Input('st-width', 'value'),
     Input('generate-map-btn1', 'n_clicks'),  # 按鈕點擊事件觸發
                                              # 使用 Input 監聽按鈕點擊事件：按鈕的點擊事件觸發地圖更新。
     Input('generate-map-btn2', 'n_clicks'), 
