@@ -458,10 +458,10 @@ def create_map2(zipcode, viewpoint, server_ip, win_width):
             #iframe = branca.element.IFrame(popup_html)
             # iframe = branca.element.IFrame(popup_html, width=200, height=180)
             # iframe = branca.element.IFrame(popup_html, width=200, height=220)
-            iframe = branca.element.IFrame(popup_html, width=win_width*0.25, height=220)
+            iframe = branca.element.IFrame(popup_html, width=int(int(win_width)*0.25), height=220)
             # popup = folium.Popup(iframe, max_width="auto")
             # popup = folium.Popup(iframe, max_width=200)
-            popup = folium.Popup(iframe, max_width=win_width*0.25)
+            popup = folium.Popup(iframe, max_width=int(win_width)*0.25)
             # popup = folium.Popup(iframe, max_width=300)
             #popup = folium.Popup(iframe, max_width=200, max_height=180)
             #popup = folium.Popup(popup_html, max_width='auto')
@@ -497,8 +497,13 @@ def create_map2(zipcode, viewpoint, server_ip, win_width):
     mymap.save(map_io, close_file=False)
     map_html = map_io.getvalue().decode()
 
+    # ⭐⭐ 最小改動：避免 options 出錯
+    # if vp_dropdown_options is no_update:
+        # vp_dropdown_options = []
+
     #return map_html, error_msg, vp_dropdown_options
     return map_html, error_msg, no_update     # vp_dropdown_options 保持現值，不改變
+    # return map_html, error_msg, vp_dropdown_options
     #return map_html, error_msg 
     
 

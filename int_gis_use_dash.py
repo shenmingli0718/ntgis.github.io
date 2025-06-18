@@ -135,7 +135,7 @@ app.layout = dbc.Container([
     dbc.Row([
         dbc.Col([
             html.P(id='window-size-display', children=[
-            "目前視窗寬度: ",
+            "目前視窗寬度:",
             html.Span(id='width'),
             ]),
             # html.Div([
@@ -183,7 +183,7 @@ app.layout = dbc.Container([
         ], width=9, className="dash-col-right"),
         dcc.Store(id='selected-location'),  # 儲存選擇的景點資訊
         dcc.Store(id='map-update-data'),  # 用于触发地图更新的存储组件
-        dcc.Store(id='st-width') # 儲存視窗寬度
+        dcc.Store(id='st-width', storage_type='memory') # 儲存視窗寬度
     ])
 ], fluid=True)
 
@@ -197,7 +197,8 @@ function dash_funtion(){
 
         // Update the HTML elements with the window size information
         document.getElementById('width').textContent = width;
-        document.getElementById('st-width').textContent = width;
+        // document.getElementById('st-width').textContent = width;
+        // document.getElementById('st-width') = width;
     }
 
     // Initial update of the window size display
@@ -210,28 +211,43 @@ function dash_funtion(){
 """,
     # Output("window-size-display", 'children'),
     # Input("window-size-display", 'children')
-    [Output("width", 'value'), Output("st-width", 'value')],
-    Input("width", 'value')
+    Output("window-size-display", 'children'),
+    Input("window-size-display", 'children')
+)
+
+app.clientside_callback(
+    """
+    function(n_clicks) {
+        let width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+        return {"目前視窗寬度": width};
+    }
+    """,
+    Output("st-width", "data"),
+    Input("generate-map-btn2", "n_clicks")  # dummy input，可使用你已有的 Input 觸發
+    # Input("window-size-display", 'children')
 )
 
 
 # Callback 更新地圖
 @app.callback(
-    [Output('map', 'srcDoc'), Output('error-message', 'children'),
-     Output('viewpoint-dropdown', 'options')],  # 更新地圖和錯誤訊息
+    Output('map', 'srcDoc'), 
+    Output('error-message', 'children'),
+    Output('viewpoint-dropdown', 'options'),  # 更新地圖和錯誤訊息
     #[Input('generate-map-btn', 'n_clicks')],
     #[Input('latitude-input', 'value'), Input('longitude-input', 'value')]
-    Input('st-width', 'value'),
+    Input('st-width', 'data'),
     Input('generate-map-btn1', 'n_clicks'),  # 按鈕點擊事件觸發
                                              # 使用 Input 監聽按鈕點擊事件：按鈕的點擊事件觸發地圖更新。
     Input('generate-map-btn2', 'n_clicks'), 
     Input('zip-area-dropdown', 'value'),
     State('name-input', 'value'),   # 名稱或地址 # 使用 State 來儲存緯度和經度數值：避免在按鈕點擊之前緯度和經度變化時觸發回調。
     State('viewpoint-dropdown', 'value')
+    # State('st-width', 'data')
     #state('viewpoint-dropdown', 'value')
 )
 ##
-def update_map_and_dropdown(win_width, map_clicks1, map_clicks2, zipcode, name, viewpoint):
+def update_map_and_dropdown(width, map_clicks1, map_clicks2, zipcode, name, viewpoint):
+                           
     # ***** Initialize default values
     #map_html = "<p>No map data available.</p>"  # Default or empty map HTML
     #error_msg = ""  # No error initially
@@ -253,7 +269,10 @@ def update_map_and_dropdown(win_width, map_clicks1, map_clicks2, zipcode, name, 
                     return create_map1(zipcode,server_ip)
                     print("trace 1 on create_map1")
                 else:
-                    return create_map2(zipcode,viewpoint,server_ip,win_width)
+                    if width is not None:
+                        return create_map2(zipcode,viewpoint,server_ip,width['目前視窗寬度'])
+                    else:
+                        return no_update, no_update, no_update 
         else:
             return no_update, no_update, no_update   # 必須
     else:
