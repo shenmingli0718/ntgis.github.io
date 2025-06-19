@@ -206,7 +206,8 @@ clientside_callback(
     """,
     [Output("window-size-display", "children"),
      Output("st-width", "data")],
-    Input("generate-map-btn2", "n_clicks")  # 較佳觸發方式
+    # Input("generate-map-btn2", "n_clicks")  # 較佳觸發方式
+     Input("window-size-display", "children")
 )
 
 
