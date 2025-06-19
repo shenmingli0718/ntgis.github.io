@@ -196,7 +196,7 @@ clientside_callback(
         }
         updateWindowSize();
         window.addEventListener('resize', updateWindowSize);
-        return [["目前視窗寬度": width], {"目前視窗寬度": width}];
+        return [{"目前視窗寬度": width}, {"目前視窗寬度": width}];
     }
     """,
     [Output("window-size-display", "children"),
