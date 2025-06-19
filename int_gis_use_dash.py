@@ -206,26 +206,27 @@ function dash_funtion(){
 
     // Attach an event listener to update the window size display on window resize
     window.addEventListener('resize', updateWindowSize);
-    return window.dash_clientside.no_update
+    return window.dash_clientside.no_update, {"目前視窗寬度": width};
 }
 """,
     # Output("window-size-display", 'children'),
     # Input("window-size-display", 'children')
     Output("window-size-display", 'children'),
+    Output("st-width", "data"),
     Input("window-size-display", 'children')
 )
 
-app.clientside_callback(
-    """
-    function(n_clicks) {
-        let width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-        return {"目前視窗寬度": width};
-    }
-    """,
-    Output("st-width", "data"),
-    Input("generate-map-btn2", "n_clicks")  # dummy input，可使用你已有的 Input 觸發
+# app.clientside_callback(
+    # """
+    # function(n_clicks) {
+        # let width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+        # return {"目前視窗寬度": width};
+    # }
+    # """,
+    # Output("st-width", "data"),
+    # Input("generate-map-btn2", "n_clicks")  # dummy input，可使用你已有的 Input 觸發
     # Input("window-size-display", 'children')
-)
+# )
 
 
 # Callback 更新地圖
