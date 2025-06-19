@@ -189,26 +189,21 @@ app.layout = dbc.Container([
 
 clientside_callback(
     """
-    function(_) {
-        var width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-
-        // 自動更新畫面與儲存視窗寬度
-        window.addEventListener('resize', function() {
-            var width2 = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-            document.getElementById('width').textContent = width2;
-        });
-
-        return [
-            ["目前視窗寬度:", width],
-            {"目前視窗寬度": width}
-        ];
+    function dash_funtion(){
+        function updateWindowSize() {
+            var width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+            document.getElementById('width').textContent = width;
+        }
+        updateWindowSize();
+        window.addEventListener('resize', updateWindowSize);
+        return [["目前視窗寬度": width], {"目前視窗寬度": width}];
     }
     """,
     [Output("window-size-display", "children"),
-     Output("st-width", "data")],
-    # Input("generate-map-btn2", "n_clicks")  # 較佳觸發方式
-     Input("window-size-display", "children")
+    Output("st-width", "data")],
+    Input("window-size-display", "children")
 )
+
 
 
 # app.clientside_callback(
