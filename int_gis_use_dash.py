@@ -188,36 +188,27 @@ app.layout = dbc.Container([
 ], fluid=True)
 
 clientside_callback(
-"""
-// javascript code
-function dash_funtion(){
-    function updateWindowSize() {
-        // Get the innerWidth and innerHeight of the browser window
+    """
+    function(_) {
         var width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 
-        // Update the HTML elements with the window size information
-        document.getElementById('width').textContent = width;
-        // document.getElementById('st-width').textContent = width;
-        // document.getElementById('st-width') = width;
-    }
+        // 自動更新畫面與儲存視窗寬度
+        window.addEventListener('resize', function() {
+            var width2 = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+            document.getElementById('width').textContent = width2;
+        });
 
-    // Initial update of the window size display
-    updateWindowSize();
-
-    // Attach an event listener to update the window size display on window resize
-    window.addEventListener('resize', updateWindowSize);
-    // return window.dash_clientside.no_update, {"目前視窗寬度": width};
-}   return [
+        return [
             ["目前視窗寬度:", width],
             {"目前視窗寬度": width}
         ];
-""",
-    # Output("window-size-display", 'children'),
-    # Input("window-size-display", 'children')
-    [Output("window-size-display", 'children'),
-    Output("st-width", "data")],
-    Input("window-size-display", 'children')
+    }
+    """,
+    [Output("window-size-display", "children"),
+     Output("st-width", "data")],
+    Input("generate-map-btn2", "n_clicks")  # 較佳觸發方式
 )
+
 
 # app.clientside_callback(
     # """
