@@ -183,7 +183,7 @@ app.layout = dbc.Container([
         ], width=9, className="dash-col-right"),
         dcc.Store(id='selected-location'),  # 儲存選擇的景點資訊
         dcc.Store(id='map-update-data'),  # 用于触发地图更新的存储组件
-        dcc.Store(id='st-width', storage_type='memory') # 儲存視窗寬度
+        dcc.Store(id='st-width', data={'目前視窗寬度': 800}) # 儲存視窗寬度
     ])
 ], fluid=True)
 
@@ -206,13 +206,16 @@ function dash_funtion(){
 
     // Attach an event listener to update the window size display on window resize
     window.addEventListener('resize', updateWindowSize);
-    return window.dash_clientside.no_update, {"目前視窗寬度": width};
-}
+    // return window.dash_clientside.no_update, {"目前視窗寬度": width};
+}   return [
+            ["目前視窗寬度:", width],
+            {"目前視窗寬度": width}
+        ];
 """,
     # Output("window-size-display", 'children'),
     # Input("window-size-display", 'children')
-    Output("window-size-display", 'children'),
-    Output("st-width", "data"),
+    [Output("window-size-display", 'children'),
+    Output("st-width", "data")],
     Input("window-size-display", 'children')
 )
 
