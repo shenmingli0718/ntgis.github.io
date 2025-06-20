@@ -140,7 +140,7 @@ app.layout = dbc.Container([
                     html.Span(id="width")
                  ]),
                 #  dcc.Interval(id="init-load-trigger", interval=100, n_intervals=0, max_intervals=1),
-                dcc.Interval(id="init-load-trigger", interval=1000, n_intervals=0, max_intervals=1),
+                #  dcc.Interval(id="init-load-trigger", interval=1000, n_intervals=0, max_intervals=1),
                 dcc.Store(id='st-width', data={'目前視窗寬度': 800})
     ]),
                         
@@ -193,36 +193,36 @@ app.layout = dbc.Container([
 ], fluid=True)
 
 clientside_callback(
-    """
-    function(n_intervals) {
-        function updateWindowSize() {
-            var width = window.innerWidth;
-            // document.getElementById('width').textContent = width;
-            var span = document.getElementById('width');
-            if (span !== null) {
-                span.textContent = width;
-            }
-            window.lastWidth = width;
+"""
+// javascript code
+function dash_funtion(){
+    function updateWindowSize() {
+        // Get the innerWidth and innerHeight of the browser window
+        var width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+
+        // Update the HTML elements with the window size information
+        document.getElementById('width').textContent = width;
+
+        // 更新 dcc.Store 的 DOM 內容 (非標準做法，但配合使用者需求)
+        var store = document.getElementById('st-width');
+        if (store) {
+            store.textContent = JSON.stringify({"目前視窗寬度": width});
         }
-
-        updateWindowSize();
-
-        // resize 只設定一次
-        if (!window.resizeListenerSet) {
-            window.addEventListener("resize", () => {
-                updateWindowSize();
-                let evt = new CustomEvent("widthChanged", { detail: window.lastWidth });
-                window.dispatchEvent(evt);
-            });
-            window.resizeListenerSet = true;
-        }
-
-        return ["目前視窗寬度: " + (window.lastWidth || 800), {"目前視窗寬度": window.lastWidth || 800}];
+    
     }
-    """,
-    [Output("window-size-display", "children"), Output("st-width", "data")],
-    [Input("init-load-trigger", "n_intervals")]
+
+    // Initial update of the window size display
+    updateWindowSize();
+
+    // Attach an event listener to update the window size display on window resize
+    window.addEventListener('resize', updateWindowSize);
+    return window.dash_clientside.no_update
+}
+""",
+    Output("window-size-display", 'children'),
+    Input("window-size-display", 'children')
 )
+
 
 
 
