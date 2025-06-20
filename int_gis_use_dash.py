@@ -138,6 +138,7 @@ app.layout = dbc.Container([
             "目前視窗寬度:",
             html.Span(id='width'),
             ]),
+            dcc.Interval(id="init-load-trigger", interval=100, n_intervals=0, max_intervals=1),
             # html.Div([
             #     html.Span("目前視窗寬度: "),
             #     html.Span(id='width',value=0)   
@@ -189,25 +190,34 @@ app.layout = dbc.Container([
 
 clientside_callback(
     """
-    function(_) {
-        var width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    function(n_intervals) {
+        function updateWindowSize() {
+            var width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+            document.getElementById('width').textContent = width;
 
-        // 自動更新畫面與儲存視窗寬度
+            // 使用 Dash 回傳 store
+            window.lastWidth = width;
+        }
+
+        // 初始呼叫一次
+        updateWindowSize();
+
+        // 設定 resize 監聽
         window.addEventListener('resize', function() {
-            var width2 = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-            document.getElementById('width').textContent = width2;
+            updateWindowSize();
+            const event = new CustomEvent("widthUpdated");
+            window.dispatchEvent(event);  // optional: 提供外部 JS 或 Dash 擴充用
         });
 
-        return [
-            ["目前視窗寬度:", width],
-            {"目前視窗寬度": width}
-        ];
+        // 傳回顯示用 children 與 Store 用 data
+        return [["目前視窗寬度:", window.lastWidth], {"目前視窗寬度": window.lastWidth}];
     }
     """,
     [Output("window-size-display", "children"),
      Output("st-width", "data")],
-    Input("generate-map-btn2", "n_clicks")  # 較佳觸發方式
+    Input("init-load-trigger", "n_intervals")
 )
+
 
 # app.clientside_callback(
     # """
