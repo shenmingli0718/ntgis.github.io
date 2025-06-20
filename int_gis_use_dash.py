@@ -134,14 +134,18 @@ def create_map(name):
 app.layout = dbc.Container([
     dbc.Row([
         dbc.Col([
-            html.P(id='window-size-display', children=[
-            "目前視窗寬度:",
-            html.Span(id='width'),
-            ]),
-            dcc.Interval(id="init-load-trigger", interval=100, n_intervals=0, max_intervals=1),
+            html.Div([
+                html.Div(id="window-size-display", children=[
+                    "目前視窗寬度:",
+                    html.Span(id="width")
+                 ]),
+                 dcc.Interval(id="init-load-trigger", interval=100, n_intervals=0, max_intervals=1),
+                 dcc.Store(id='st-width', data={'目前視窗寬度': 800})
+    ]),
+                        
             # html.Div([
             #     html.Span("目前視窗寬度: "),
-            #     html.Span(id='width',value=0)   
+            #    fun html.Span(id='width',value=0)   
             # ]),
             html.Div([
             dcc.Location(id='url', refresh=False),
@@ -184,7 +188,6 @@ app.layout = dbc.Container([
         ], width=9, className="dash-col-right"),
         dcc.Store(id='selected-location'),  # 儲存選擇的景點資訊
         dcc.Store(id='map-update-data'),  # 用于触发地图更新的存储组件
-        dcc.Store(id='st-width', data={'目前視窗寬度': 800}) # 儲存視窗寬度
     ])
 ], fluid=True)
 
@@ -193,30 +196,34 @@ clientside_callback(
     function(n_intervals) {
         function updateWindowSize() {
             var width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-            document.getElementById('width').textContent = width;
 
-            // 使用 Dash 回傳 store
+            // 防止 'width' 元素尚未渲染造成錯誤
+            var span = document.getElementById('width');
+            if (span !== null) {
+                span.textContent = width;
+            }
+
+            // 將目前視窗寬度暫存於全域變數，以便 return
             window.lastWidth = width;
         }
 
-        // 初始呼叫一次
+        // 初始呼叫
         updateWindowSize();
 
-        // 設定 resize 監聽
-        window.addEventListener('resize', function() {
-            updateWindowSize();
-            const event = new CustomEvent("widthUpdated");
-            window.dispatchEvent(event);  // optional: 提供外部 JS 或 Dash 擴充用
-        });
+        // 設定 resize 時呼叫
+        window.addEventListener('resize', updateWindowSize);
 
-        // 傳回顯示用 children 與 Store 用 data
-        return [["目前視窗寬度:", window.lastWidth], {"目前視窗寬度": window.lastWidth}];
+        // 若 window.lastWidth 尚未設置，提供 fallback 值
+        var safeWidth = window.lastWidth || 800;
+
+        return [["目前視窗寬度:", safeWidth], {"目前視窗寬度": safeWidth}];
     }
     """,
     [Output("window-size-display", "children"),
      Output("st-width", "data")],
     Input("init-load-trigger", "n_intervals")
 )
+
 
 
 # app.clientside_callback(
