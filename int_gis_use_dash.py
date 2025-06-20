@@ -194,42 +194,32 @@ app.layout = dbc.Container([
 
 clientside_callback(
     """
-function(n_intervals) {
-    function updateWindowSize() {
-        var width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-
-        // 更新畫面中的 span
-        var span = document.getElementById('width');
-        if (span !== null) {
-            span.textContent = width;
-
-            // 觸發 input event 讓 Dash callback 被觸發（等同於使用者手動互動）
-            var evt = new Event('input', { bubbles: true });
-            span.dispatchEvent(evt);
+    function(n_intervals) {
+        function updateWindowSize() {
+            var width = window.innerWidth;
+            document.getElementById('width').textContent = width;
+            window.lastWidth = width;
         }
 
-        // 同時記錄供 return 使用
-        window.lastWidth = width;
+        updateWindowSize();
+
+        // resize 只設定一次
+        if (!window.resizeListenerSet) {
+            window.addEventListener("resize", () => {
+                updateWindowSize();
+                let evt = new CustomEvent("widthChanged", { detail: window.lastWidth });
+                window.dispatchEvent(evt);
+            });
+            window.resizeListenerSet = true;
+        }
+
+        return ["目前視窗寬度: " + (window.lastWidth || 800), {"目前視窗寬度": window.lastWidth || 800}];
     }
-
-    // 初始化
-    updateWindowSize();
-
-    // 只綁一次 resize listener
-    if (!window.resizeListenerSet) {
-        window.addEventListener('resize', updateWindowSize);
-        window.resizeListenerSet = true;
-    }
-
-    var safeWidth = window.lastWidth || 800;
-    return [["目前視窗寬度:", safeWidth], {"目前視窗寬度": safeWidth}];
-}
-
     """,
-    [Output("window-size-display", "children"),
-     Output("st-width", "data")],
-    Input("init-load-trigger", "n_intervals")
+    [Output("window-size-display", "children"), Output("st-width", "data")],
+    [Input("init-load-trigger", "n_intervals")]
 )
+
 
 
 
