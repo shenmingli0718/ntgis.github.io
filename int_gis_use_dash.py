@@ -197,7 +197,11 @@ clientside_callback(
     function(n_intervals) {
         function updateWindowSize() {
             var width = window.innerWidth;
-            document.getElementById('width').textContent = width;
+            // document.getElementById('width').textContent = width;
+            var span = document.getElementById('width');
+            if (span !== null) {
+                span.textContent = width;
+            }
             window.lastWidth = width;
         }
 
