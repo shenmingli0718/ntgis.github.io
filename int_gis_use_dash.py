@@ -140,7 +140,7 @@ app.layout = dbc.Container([
                     html.Span(id="width")
                  ]),
                 #  dcc.Interval(id="init-load-trigger", interval=100, n_intervals=0, max_intervals=1),
-                dcc.Interval(id="init-load-trigger", interval=1000, n_intervals=0, max_intervals=-1),
+                dcc.Interval(id="init-load-trigger", interval=1000, n_intervals=0, max_intervals=1),
                 dcc.Store(id='st-width', data={'目前視窗寬度': 800})
     ]),
                         
