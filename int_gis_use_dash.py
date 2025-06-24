@@ -135,14 +135,16 @@ app.layout = dbc.Container([
     dbc.Row([
         dbc.Col([
             html.Div([
-                html.Div(id="window-size-display", children=[
-                    "目前視窗寬度:",
-                    html.Span(id="width")
-                 ]),
+                dcc.Store(id='st-width'),
+                html.Div([
+                    html.Span("目前視窗寬度: "),
+                    html.Span(id='width-display')
+                ]),
                 #  dcc.Interval(id="init-load-trigger", interval=100, n_intervals=0, max_intervals=1),
                 #  dcc.Interval(id="init-load-trigger", interval=1000, n_intervals=0, max_intervals=1),
-                dcc.Store(id='st-width', data={'目前視窗寬度': 800})
-    ]),
+                # dcc.Interval(id='interval', interval=1000, n_intervals=0)  # 為了觸發第一次 clientside callback
+                dcc.Interval(id='interval', interval=1000, n_intervals=0, max_intervals=1)  # 為了觸發第一次 clientside callback
+        ]),
                         
             # html.Div([
             #     html.Span("目前視窗寬度: "),
@@ -192,53 +194,55 @@ app.layout = dbc.Container([
     ])
 ], fluid=True)
 
-clientside_callback(
-"""
-// javascript code
-function dash_funtion(){
-    function updateWindowSize() {
-        // Get the innerWidth and innerHeight of the browser window
-        var width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+# const storeComponent = document.querySelector('#st-width');造成⚠️ 無法找到 st-width 元件
+# 這樣不保證 Dash render 完會成功。
+# 改用 Dash 官方支援的方式回傳 store 值，不要硬塞 DOM
+app.clientside_callback(
+    """
+    function(n_intervals) {
+        // 定義全域變數，避免重複綁定 resize
+        if (!window.hasResizeListener) {
+            window.hasResizeListener = true;
 
-        // Update the HTML elements with the window size information
-        document.getElementById('width').textContent = width;
+            window.addEventListener("resize", function() {
+                const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+                console.log("Resize偵測成功，寬度:", width);
+                
+                // 將寬度更新至全域變數
+                window.dash_clientside = window.dash_clientside || {};
+                window.dash_clientside.storeData = { '目前視窗寬度': width };
 
-        // 更新 dcc.Store 的 DOM 內容 (非標準做法，但配合使用者需求)
-        var store = document.getElementById('st-width');
-        if (store) {
-            store.textContent = JSON.stringify({"目前視窗寬度": width});
+                // 手動觸發 Dash 更新
+                const storeComponent = document.querySelector('#st-width');
+                if (storeComponent) {
+                    storeComponent.value = JSON.stringify(window.dash_clientside.storeData);
+                    storeComponent.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+            });
+
+            console.log("✅ 成功綁定 resize listener");
         }
-    
+
+        // 初始化寬度（首次回傳給 Dash）
+        return {
+            '目前視窗寬度': window.innerWidth
+        };
     }
-
-    // Initial update of the window size display
-    updateWindowSize();
-
-    // Attach an event listener to update the window size display on window resize
-    window.addEventListener('resize', updateWindowSize);
-    return window.dash_clientside.no_update
-}
-""",
-    Output("window-size-display", 'children'),
-    Input("window-size-display", 'children')
+    """,
+    Output("st-width", "data"),
+    Input("interval", "n_intervals")
 )
 
 
-
-
-
-# app.clientside_callback(
-    # """
-    # function(n_clicks) {
-        # let width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-        # return {"目前視窗寬度": width};
-    # }
-    # """,
-    # Output("st-width", "data"),
-    # Input("generate-map-btn2", "n_clicks")  # dummy input，可使用你已有的 Input 觸發
-    # Input("window-size-display", 'children')
-# )
-
+# 👀 Python callback：將 Store 寬度顯示出來
+@app.callback(
+    Output('width-display', 'children'),
+    Input('st-width', 'data')
+)
+def show_width(data):
+    if data is not None and '目前視窗寬度' in data:
+        return f"{data['目前視窗寬度']} px"
+    return "尚未偵測到視窗寬度"
 
 # Callback 更新地圖
 @app.callback(
@@ -376,3 +380,36 @@ if __name__ == '__main__':
     
 # 將應用靜態導出為 HTML 文件
 #app.run_server(export=True, directory='exported')
+
+# === Resize 偵測用 clientside_callback ===
+clientside_callback(
+    '''
+    function(n_intervals) {
+        if (!window.hasResizeListener) {
+            window.hasResizeListener = true;
+            window.addEventListener("resize", function() {
+                const width = window.innerWidth;
+                console.log("Resize偵測成功，寬度:", width);
+                window.dash_clientside = window.dash_clientside || {};
+                window.dash_clientside.storeData = { '目前視窗寬度': width };
+                const dummy = document.getElementById('dummy-trigger');
+                if (dummy) dummy.textContent = Date.now();
+            });
+            console.log("✅ 成功綁定 resize listener");
+        }
+        return { '目前視窗寬度': window.innerWidth };
+    }
+    ''' ,
+    Output('st-width', 'data'),
+    Input('interval', 'n_intervals')
+)
+
+# === 顯示視窗寬度 callback ===
+@app.callback(
+    Output('width', 'children'),
+    Input('st-width', 'data')
+)
+def update_width_display(data):
+    if data and '目前視窗寬度' in data:
+        return f"{data['目前視窗寬度']} px"
+    return "尚未取得"
