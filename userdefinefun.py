@@ -285,7 +285,7 @@ def create_map1(breakpoint_name, zipcode, server_ip, window_width):
     print("trace 2 on create_map1")
     #
     return f"斷點名稱: {breakpoint_name}, 視窗寬度: {window_width}px", map_html, error_msg, vp_dropdown_options
-
+# 斷點處理
 def create_map2(breakpoint_name, zipcode, viewpoint, server_ip, window_width):
     import pandas as pd
     import geopandas as gpd

@@ -1,5 +1,5 @@
 import dash
-from dash_breakpoints import WindowBreakpoints
+from dash_breakpoints import WindowBreakpoints # 斷點處理
 from dash import dcc, html
 from dash.dependencies import Input, Output, State
 import folium
