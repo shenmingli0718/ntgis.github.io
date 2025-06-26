@@ -62,7 +62,7 @@ def get_tourist_data():
         print("Failed to fetch 新北觀光旅遊檔")
         return pd.DataFrame()
 
-def create_vp_dropdown_options(zipcode):
+def create_vp_dropdown_options(breakpoint_name, zipcode,window_width):
     import pandas as pd
     from dash import no_update
 #
@@ -73,7 +73,7 @@ def create_vp_dropdown_options(zipcode):
     {'label': f"{idx+1} {row['Name']}", 'value': row['Name']}
     for idx, row in selected_df.iterrows()
     ]
-    return no_update, no_update, vp_dropdown_options
+    return f"斷點名稱: {breakpoint_name}, 視窗寬度: {window_width}px", no_update, no_update, vp_dropdown_options
     #
 ##
 def get_unique_zip_area_df():
@@ -123,7 +123,7 @@ def calculate_center_point(data,selected_zipcode):
     return selected_center
     
 ###
-def create_map1(zipcode, server_ip):
+def create_map1(breakpoint_name, zipcode, server_ip, window_width):
     import pandas as pd
     import geopandas as gpd
     import folium
@@ -284,9 +284,9 @@ def create_map1(zipcode, server_ip):
     #
     print("trace 2 on create_map1")
     #
-    return map_html, error_msg, vp_dropdown_options
+    return f"斷點名稱: {breakpoint_name}, 視窗寬度: {window_width}px", map_html, error_msg, vp_dropdown_options
 
-def create_map2(zipcode, viewpoint, server_ip, win_width):
+def create_map2(breakpoint_name, zipcode, viewpoint, server_ip, window_width):
     import pandas as pd
     import geopandas as gpd
     import folium
@@ -458,10 +458,10 @@ def create_map2(zipcode, viewpoint, server_ip, win_width):
             #iframe = branca.element.IFrame(popup_html)
             # iframe = branca.element.IFrame(popup_html, width=200, height=180)
             # iframe = branca.element.IFrame(popup_html, width=200, height=220)
-            iframe = branca.element.IFrame(popup_html, width=int(int(win_width)*0.25), height=220)
+            iframe = branca.element.IFrame(popup_html, width=window_width*0.25, height=220)
             # popup = folium.Popup(iframe, max_width="auto")
             # popup = folium.Popup(iframe, max_width=200)
-            popup = folium.Popup(iframe, max_width=int(win_width)*0.25)
+            popup = folium.Popup(iframe, max_width=window_width*0.25)
             # popup = folium.Popup(iframe, max_width=300)
             #popup = folium.Popup(iframe, max_width=200, max_height=180)
             #popup = folium.Popup(popup_html, max_width='auto')
@@ -502,7 +502,7 @@ def create_map2(zipcode, viewpoint, server_ip, win_width):
         # vp_dropdown_options = []
 
     #return map_html, error_msg, vp_dropdown_options
-    return map_html, error_msg, no_update     # vp_dropdown_options 保持現值，不改變
+    return f"斷點名稱: {breakpoint_name}, 視窗寬度: {window_width}px", map_html, error_msg, no_update     # vp_dropdown_options 保持現值，不改變
     # return map_html, error_msg, vp_dropdown_options
     #return map_html, error_msg 
     

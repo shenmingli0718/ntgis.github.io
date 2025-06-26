@@ -1,5 +1,6 @@
 import dash
-from dash import dcc, html,  clientside_callback
+from dash_breakpoints import WindowBreakpoints
+from dash import dcc, html
 from dash.dependencies import Input, Output, State
 import folium
 from folium import Marker
@@ -63,7 +64,7 @@ server_ip = get_host_ip()
 # 初始化地圖函數
 ##
 # 自定義樣式函數
-def create_map(name):
+def create_map(breakpoint_name,name,window_width):
     
     # 讀取大台北鄉鎮市區界圖shpe file(含台北市、新北市)
     # Big_Taipei_data = gpd.read_file('static/shapefiles/Taipei.shp', encoding='utf-8')
@@ -128,33 +129,40 @@ def create_map(name):
     map_html = map_io.getvalue().decode()
 
     # return map_html, error_msg, []
-    return map_html, error_msg, no_update 
+    return f"斷點名稱: {breakpoint_name}, 視窗寬度: {window_width}px", map_html, error_msg, no_update 
 
+# 全域變數
+# g_width = 1000  # 預設寬度
 # App Layout
 app.layout = dbc.Container([
     dbc.Row([
         dbc.Col([
-            html.Div([
-                dcc.Store(id='st-width'),
-                html.Div([
-                    html.Span("目前視窗寬度: "),
-                    html.Span(id='width-display')
-                ]),
-                #  dcc.Interval(id="init-load-trigger", interval=100, n_intervals=0, max_intervals=1),
-                #  dcc.Interval(id="init-load-trigger", interval=1000, n_intervals=0, max_intervals=1),
-                # dcc.Interval(id='interval', interval=1000, n_intervals=0)  # 為了觸發第一次 clientside callback
-                dcc.Interval(id='interval', interval=1000, n_intervals=0, max_intervals=1)  # 為了觸發第一次 clientside callback
-        ]),
-                        
+            html.Div(id='window-size-display'),
+            WindowBreakpoints(
+                id="breakpoints",
+                # Define the breakpoint thresholds
+                # widthBreakpointThresholdsPx=[800, 1200],
+                widthBreakpointThresholdsPx=[575, 767, 991, 1199],
+                # And their name, note that there is one more name than breakpoint thresholds
+                widthBreakpointNames=["xs", "sm", "md", "lg", "xl"],
+            ),
+            # html.Div([
+            #     html.Span("目前視窗寬度: "),
+            #     html.Span(id='width-display')
+            # ]),
+            #  dcc.Interval(id="init-load-trigger", interval=100, n_intervals=0, max_intervals=1),
+            #  dcc.Interval(id="init-load-trigger", interval=1000, n_intervals=0, max_intervals=1),
+            # dcc.Interval(id='interval', interval=1000, n_intervals=0)  # 為了觸發第一次 clientside callback
+            dcc.Interval(id='interval', interval=1000, n_intervals=0, max_intervals=1),  # 為了觸發第一次 clientside callback
+            html.Div(id='dummy-trigger', style={'display': 'none'}),
             # html.Div([
             #     html.Span("目前視窗寬度: "),
             #    fun html.Span(id='width',value=0)   
             # ]),
             html.Div([
-            dcc.Location(id='url', refresh=False),
-            html.Div(id='page-content')
+                dcc.Location(id='url', refresh=False),
+                html.Div(id='page-content')
             ]),
-            #
             html.H4("互動式 GIS 系統", className='text-center mb-4'),
             dbc.Label("請輸入世界各地任一地點名稱:"),
             dcc.Input(id='name-input', type='text', value=""),            
@@ -163,25 +171,24 @@ app.layout = dbc.Container([
             dbc.Label("-----------------------------------"),
             html.Br(),
             html.Div([
-            html.Label("新北市觀光旅遊景點位置查詢"),
-            html.Label("點選新北市郵遞區號及區域名稱"),
-            html.Br(),
-            dcc.Dropdown(
-                id='zip-area-dropdown',
-                options=dropdown_options,
-                placeholder="選擇新北市郵遞區號及區域名稱",
+                html.Label("新北市觀光旅遊景點位置查詢"),
+                html.Label("點選新北市郵遞區號及區域名稱"),
+                html.Br(),
+                dcc.Dropdown(
+                    id='zip-area-dropdown',
+                    options=dropdown_options,
+                    placeholder="選擇新北市郵遞區號及區域名稱",
                 ),
             ]),
-            #
             dbc.Button("繪製地圖(新北市範圍)", id="generate-map-btn2", color="primary", className="mt-2"),
             #dbc.Button("區景點瀏覽", id="viewpoint-qry-btn", color="primary", className="mt-2"),
             html.Br(),
             html.Br(),
             dcc.Dropdown(
                 id='viewpoint-dropdown',
-            #   options=vp_dropdown_options,
+                #   options=vp_dropdown_options,
                 placeholder="選擇區內景點名稱",
-                ),
+            ),
             html.Br(),
             #html.Div(id='error-message', style={'color': 'red', 'margin-top': '10px'}),
             html.Div(id='error-message', style={'color': 'red', 'marginTop': '10px'}),
@@ -197,72 +204,40 @@ app.layout = dbc.Container([
 # const storeComponent = document.querySelector('#st-width');造成⚠️ 無法找到 st-width 元件
 # 這樣不保證 Dash render 完會成功。
 # 改用 Dash 官方支援的方式回傳 store 值，不要硬塞 DOM
-app.clientside_callback(
-    """
-    function(n_intervals) {
-        // 定義全域變數，避免重複綁定 resize
-        if (!window.hasResizeListener) {
-            window.hasResizeListener = true;
+# 非正規實作
 
-            window.addEventListener("resize", function() {
-                const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-                console.log("Resize偵測成功，寬度:", width);
-                
-                // 將寬度更新至全域變數
-                window.dash_clientside = window.dash_clientside || {};
-                window.dash_clientside.storeData = { '目前視窗寬度': width };
-
-                // 手動觸發 Dash 更新
-                const storeComponent = document.querySelector('#st-width');
-                if (storeComponent) {
-                    storeComponent.value = JSON.stringify(window.dash_clientside.storeData);
-                    storeComponent.dispatchEvent(new Event('input', { bubbles: true }));
-                }
-            });
-
-            console.log("✅ 成功綁定 resize listener");
-        }
-
-        // 初始化寬度（首次回傳給 Dash）
-        return {
-            '目前視窗寬度': window.innerWidth
-        };
-    }
-    """,
-    Output("st-width", "data"),
-    Input("interval", "n_intervals")
-)
-
-
-# 👀 Python callback：將 Store 寬度顯示出來
-@app.callback(
-    Output('width-display', 'children'),
-    Input('st-width', 'data')
-)
-def show_width(data):
-    if data is not None and '目前視窗寬度' in data:
-        return f"{data['目前視窗寬度']} px"
-    return "尚未偵測到視窗寬度"
+# @app.callback(
+    # Output("window-size-display", "children"),
+    # Input("breakpoints", "widthBreakpoint"),
+    # State("breakpoints", "width"),
+# )
+# def show_current_breakpoint(breakpoint_name: str, window_width: int):
+    # return f"斷點名稱: {breakpoint_name}, 視窗寬度: {window_width}px"
 
 # Callback 更新地圖
 @app.callback(
+    Output("window-size-display", "children"),
     Output('map', 'srcDoc'), 
     Output('error-message', 'children'),
     Output('viewpoint-dropdown', 'options'),  # 更新地圖和錯誤訊息
     #[Input('generate-map-btn', 'n_clicks')],
     #[Input('latitude-input', 'value'), Input('longitude-input', 'value')]
-    Input('st-width', 'data'),
+    Input("breakpoints", "widthBreakpoint"),
+    #Input('width', 'children'),
+    # Input('width', 'data'),
     Input('generate-map-btn1', 'n_clicks'),  # 按鈕點擊事件觸發
                                              # 使用 Input 監聽按鈕點擊事件：按鈕的點擊事件觸發地圖更新。
     Input('generate-map-btn2', 'n_clicks'), 
     Input('zip-area-dropdown', 'value'),
     State('name-input', 'value'),   # 名稱或地址 # 使用 State 來儲存緯度和經度數值：避免在按鈕點擊之前緯度和經度變化時觸發回調。
-    State('viewpoint-dropdown', 'value')
+    State('viewpoint-dropdown', 'value'),
+    State("breakpoints", "width")
+
     # State('st-width', 'data')
     #state('viewpoint-dropdown', 'value')
 )
 ##
-def update_map_and_dropdown(width, map_clicks1, map_clicks2, zipcode, name, viewpoint):
+def update_map_and_dropdown(breakpoint_name: str, map_clicks1, map_clicks2, zipcode, name, viewpoint, window_width: int):
                            
     # ***** Initialize default values
     #map_html = "<p>No map data available.</p>"  # Default or empty map HTML
@@ -273,28 +248,27 @@ def update_map_and_dropdown(width, map_clicks1, map_clicks2, zipcode, name, view
     triggered_input = ctx.triggered[0]['prop_id'].split('.')[0]
     # 如果是 zip-area-dropdown 觸發的回調，更新 viewpoint-dropdown 的選項
     if triggered_input == 'zip-area-dropdown':
-        return create_vp_dropdown_options(zipcode) 
+        return create_vp_dropdown_options(breakpoint_name,zipcode,window_width) 
     elif triggered_input in ['generate-map-btn1', 'generate-map-btn2']:
     # 當按鈕點擊後，根據 name 和 zipcode 判斷要生成哪種地圖
         if name:
             if map_clicks1 is not None:
-                return create_map(name)  # 優先使用 name
+                return create_map(breakpoint_name,name,window_width)  # 優先使用 name
         elif zipcode:
             if map_clicks2 is not None:
                 if not viewpoint: 
-                    return create_map1(zipcode,server_ip)
+                    return create_map1(breakpoint_name,zipcode,server_ip,window_width)
                     print("trace 1 on create_map1")
                 else:
-                    if width is not None:
-                        return create_map2(zipcode,viewpoint,server_ip,width['目前視窗寬度'])
-                    else:
-                        return no_update, no_update, no_update 
+                    return create_map2(breakpoint_name,zipcode,viewpoint,server_ip,window_width)
+                    # else:
+                        # return no_update, no_update, no_update 
         else:
-            return no_update, no_update, no_update   # 必須
+            return f"斷點名稱: {breakpoint_name}, 視窗寬度: {window_width}px",no_update, no_update, no_update   # 必須
     else:
         # 初始狀態，當 n_clicks 為 None 時顯示默認地圖
         name = name if name else "石碇區石碇里"  # 預設地點
-        return create_map(name)
+        return create_map(breakpoint_name,name,window_width)
             
                 
     #    else:
@@ -382,27 +356,7 @@ if __name__ == '__main__':
 #app.run_server(export=True, directory='exported')
 
 # === Resize 偵測用 clientside_callback ===
-clientside_callback(
-    '''
-    function(n_intervals) {
-        if (!window.hasResizeListener) {
-            window.hasResizeListener = true;
-            window.addEventListener("resize", function() {
-                const width = window.innerWidth;
-                console.log("Resize偵測成功，寬度:", width);
-                window.dash_clientside = window.dash_clientside || {};
-                window.dash_clientside.storeData = { '目前視窗寬度': width };
-                const dummy = document.getElementById('dummy-trigger');
-                if (dummy) dummy.textContent = Date.now();
-            });
-            console.log("✅ 成功綁定 resize listener");
-        }
-        return { '目前視窗寬度': window.innerWidth };
-    }
-    ''' ,
-    Output('st-width', 'data'),
-    Input('interval', 'n_intervals')
-)
+
 
 # === 顯示視窗寬度 callback ===
 @app.callback(
