@@ -129,7 +129,7 @@ def create_map(breakpoint_name,name,window_width):
     map_html = map_io.getvalue().decode()
 
     # return map_html, error_msg, []
-    return f"斷點名稱: {breakpoint_name}, 視窗寬度: {window_width}px", map_html, error_msg, no_update 
+    return f"(斷點名稱: {breakpoint_name} 視窗寬度: {window_width} px)", map_html, error_msg, no_update 
 
 # 全域變數
 # g_width = 1000  # 預設寬度
@@ -153,8 +153,8 @@ app.layout = dbc.Container([
             #  dcc.Interval(id="init-load-trigger", interval=100, n_intervals=0, max_intervals=1),
             #  dcc.Interval(id="init-load-trigger", interval=1000, n_intervals=0, max_intervals=1),
             # dcc.Interval(id='interval', interval=1000, n_intervals=0)  # 為了觸發第一次 clientside callback
-            dcc.Interval(id='interval', interval=1000, n_intervals=0, max_intervals=1),  # 為了觸發第一次 clientside callback
-            html.Div(id='dummy-trigger', style={'display': 'none'}),
+            # dcc.Interval(id='interval', interval=1000, n_intervals=0, max_intervals=1),  # 為了觸發第一次 clientside callback
+            # html.Div(id='dummy-trigger', style={'display': 'none'}),
             # html.Div([
             #     html.Span("目前視窗寬度: "),
             #    fun html.Span(id='width',value=0)   
@@ -163,7 +163,7 @@ app.layout = dbc.Container([
                 dcc.Location(id='url', refresh=False),
                 html.Div(id='page-content')
             ]),
-            html.H4("互動式 GIS 系統", className='text-center mb-4'),
+            html.H4("互動式GIS系統2.0", className='text-center mb-4'),
             dbc.Label("請輸入世界各地任一地點名稱:"),
             dcc.Input(id='name-input', type='text', value=""),            
             html.Br(),
@@ -264,7 +264,7 @@ def update_map_and_dropdown(breakpoint_name: str, map_clicks1, map_clicks2, zipc
                     # else:
                         # return no_update, no_update, no_update 
         else:
-            return f"斷點名稱: {breakpoint_name}, 視窗寬度: {window_width}px",no_update, no_update, no_update   # 必須
+            return f"(斷點名稱: {breakpoint_name} 視窗寬度: {window_width} px)",no_update, no_update, no_update   # 必須
     else:
         # 初始狀態，當 n_clicks 為 None 時顯示默認地圖
         name = name if name else "石碇區石碇里"  # 預設地點

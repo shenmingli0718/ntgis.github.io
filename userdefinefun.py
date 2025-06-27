@@ -73,7 +73,7 @@ def create_vp_dropdown_options(breakpoint_name, zipcode,window_width):
     {'label': f"{idx+1} {row['Name']}", 'value': row['Name']}
     for idx, row in selected_df.iterrows()
     ]
-    return f"斷點名稱: {breakpoint_name}, 視窗寬度: {window_width}px", no_update, no_update, vp_dropdown_options
+    return f"(斷點名稱: {breakpoint_name} 視窗寬度: {window_width} px)", no_update, no_update, vp_dropdown_options
     #
 ##
 def get_unique_zip_area_df():
@@ -286,7 +286,7 @@ def create_map1(breakpoint_name, zipcode, server_ip, window_width):
     #
     print("trace 2 on create_map1")
     #
-    return f"斷點名稱: {breakpoint_name}, 視窗寬度: {window_width}px", map_html, error_msg, vp_dropdown_options
+    return f"(斷點名稱: {breakpoint_name} 視窗寬度: {window_width} px)", map_html, error_msg, vp_dropdown_options
 # 斷點處理
 def create_map2(breakpoint_name, zipcode, viewpoint, server_ip, window_width):
     import pandas as pd
@@ -504,7 +504,7 @@ def create_map2(breakpoint_name, zipcode, viewpoint, server_ip, window_width):
         # vp_dropdown_options = []
 
     #return map_html, error_msg, vp_dropdown_options
-    return f"斷點名稱: {breakpoint_name}, 視窗寬度: {window_width}px", map_html, error_msg, no_update     # vp_dropdown_options 保持現值，不改變
+    return f"(斷點名稱: {breakpoint_name} 視窗寬度: {window_width} px)", map_html, error_msg, no_update     # vp_dropdown_options 保持現值，不改變
     # return map_html, error_msg, vp_dropdown_options
     #return map_html, error_msg 
     
