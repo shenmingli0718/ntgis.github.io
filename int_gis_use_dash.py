@@ -91,7 +91,7 @@ def create_map(breakpoint_name,name,window_width):
     #
     if getLoc is not None:
         if name != "石碇區石碇里":
-           popup="<div style='font-size: 24px;'>" +getLoc.address + "<br>" + str(getLoc.latitude) + "<br>" + str(getLoc.longitude) + "/div>"
+           popup="<div style='font-size: 24px;'>" +getLoc.address + "<br>" + str(getLoc.latitude) + "<br>" + str(getLoc.longitude) + "</div>"
         else:
             popup="<div style='font-size: 24px;'>" + "新北市中心位置：" + "<br>" + getLoc.address + "<br>" + str(getLoc.latitude) + "<br>" + str(getLoc.longitude) + "</div>"
 
