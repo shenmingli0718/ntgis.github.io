@@ -91,12 +91,12 @@ def create_map(breakpoint_name,name,window_width):
     #
     if getLoc is not None:
         if name != "石碇區石碇里":
-            popup=getLoc.address + "<br>" + str(getLoc.latitude) + "<br>" + str(getLoc.longitude)
+           popup="<div style='font-size: 24px;'>" +getLoc.address + "<br>" + str(getLoc.latitude) + "<br>" + str(getLoc.longitude) + "/div>"
         else:
-            popup="新北市中心位置：" + "<br>" + getLoc.address + "<br>" + str(getLoc.latitude) + "<br>" + str(getLoc.longitude)
+            popup="<div style='font-size: 24px;'>" + "新北市中心位置：" + "<br>" + getLoc.address + "<br>" + str(getLoc.latitude) + "<br>" + str(getLoc.longitude) + "</div>"
 
         mymap = folium.Map(location=[getLoc.latitude, getLoc.longitude], zoom_start=12)
-        Marker([getLoc.latitude, getLoc.longitude], popup=popup).add_to(mymap)
+        Marker([getLoc.latitude, getLoc.longitude], popup=popup, icon=folium.Icon(color="red")).add_to(mymap)
         # 將 Shapefile 轉為 GeoJSON 並添加到地圖
         folium.GeoJson(New_Taipei_data, style_function=style_function).add_to(mymap)
         error_msg=""

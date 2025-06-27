@@ -257,9 +257,11 @@ def create_map1(breakpoint_name, zipcode, server_ip, window_width):
             ##
             #print("(create_map1) popup_html= ", popup_html)
             #iframe = folium.IFrame(popup_html, width=150, height=150)
-            iframe = branca.element.IFrame(popup_html, width=200, height=180)
+            # iframe = branca.element.IFrame(popup_html, width=200, height=180)
+            iframe = branca.element.IFrame(popup_html, width=window_width*0.25, height=180)
             # popup = folium.Popup(iframe, max_width=200, max_height=180)
-            popup = folium.Popup(iframe, max_width='auto')
+            # popup = folium.Popup(iframe, max_width='auto')
+            popup = folium.Popup(iframe, max_width=window_width*0.25)
             ##popup = folium.Popup(popup_html, max_width=300)
             ##
             marker_cluster.add_child(Marker(location = [row['Py'], row['Px']], popup = popup, icon=folium.Icon(color="red")))
