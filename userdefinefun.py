@@ -347,6 +347,53 @@ def create_map2(breakpoint_name, zipcode, viewpoint, server_ip, window_width):
             ##    <div id="popup-content" style="width: auto; max-width: 60vx; max-height: 60vh; overflow-y: auto;">
             # popup_html = f"""
             popup_html = f"""
+                <html><body>
+                <style> 
+                /* popup 內所有按鈕（含 Bootstrap .btn） */
+                button, .btn {{
+                  /* 透明底但看得見：淡白底 + 清楚邊框 */
+                  background: rgba(255,255,255,0.1) !important;   /* 基本透明度 */
+                  /* border: 2px solid rgba(0,0,0,0.6) !important; */
+                  color: #003366 !important;       /* 深藍，穩重、易讀 */
+                  border: 1.5px solid #003366 !important;
+
+                  /* 輕微毛玻璃，讓地圖紋理不搶眼（支援瀏覽器才會生效） */
+                  -webkit-backdrop-filter: blur(2px);
+                  backdrop-filter: blur(2px);
+
+                  /* 形狀與間距 */
+                  border-radius: 10px !important;
+                  padding: 6px 12px !important;
+                  font-weight: 600;
+
+                  /* 移除瀏覽器/Bootstrap 遺留外觀 */
+                  background-image: none !important;
+                  box-shadow: 0 1px 2px rgba(0,0,0,0.15) !important;
+                  outline: none !important;
+                  -webkit-appearance: none !important;
+                  -moz-appearance: none !important;
+                  appearance: none !important;
+
+                  /* 動畫回饋 */
+                  transition: background .15s ease, box-shadow .15s ease, transform .05s ease;
+                }}
+
+                /* 滑過更清楚一點 */
+                button:hover, .btn:hover {{
+                  background: rgba(255,255,255,0.30) !important;
+                  box-shadow: 0 2px 6px rgba(0,0,0,0.25) !important;
+                }}
+
+                /* 點下去有壓下感 */
+                button:active, .btn:active {{
+                  transform: translateY(1px);
+                }}
+
+                /* 鍵盤可及性：聚焦外框（不會改變透明感） */
+                button:focus-visible, .btn:focus-visible {{
+                  box-shadow: 0 0 0 3px rgba(0,123,255,0.35) !important;
+                }}
+                </style>
                 <!-- <style> 
                 /* 手機:地圖標記popup縮小比例 */
                 /* @media (min-width: 150px) {{
@@ -370,7 +417,7 @@ def create_map2(breakpoint_name, zipcode, viewpoint, server_ip, window_width):
                     }}
                 }} */
                  </style> -->
-                <div id="popup-content" style="max-width: 98vw; max-height: 98vh; font-size: 14px; position: relative;">
+                <div>
                     <b>{name}</b><br>
                     <b>{row['Opentime']}</b><br>
                     <b>{row['Add']}</b><br>
@@ -381,6 +428,7 @@ def create_map2(breakpoint_name, zipcode, viewpoint, server_ip, window_width):
                     <button style="width: 100%;" onclick="openWindow('upload', '{id_}', '{name}', '{server_ip}')">上傳照片</button><br><br>
                     <button style="width: 100%;" onclick="openWindow('download', '{id_}', '{name}', '{server_ip}')">下載照片</button><br><br>
                     <button style="width: 100%;" onclick="openWindow('edit', '{id_}', '{name}', '{server_ip}')">填寫相關資訊</button>
+                </div>
                 <script>
                         function openWindow(action, locationId, name, server_ip) {{
                             let url = '';
@@ -449,7 +497,7 @@ def create_map2(breakpoint_name, zipcode, viewpoint, server_ip, window_width):
                     //}}
                     //mymap.on("zoomend", updatePopupSize);
                 </script>
-            </div>
+                </body></html>
             """
             ##
             #marker_cluster.add_child(Marker([row['Py'], row['Px']]))
