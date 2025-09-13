@@ -293,6 +293,7 @@ def create_map2(breakpoint_name, zipcode, viewpoint, server_ip, window_width):
     import geopandas as gpd
     import folium
     from folium import Marker
+    from folium import Element
     #from folium.plugins import MarkerCluster
     import branca
     import io
@@ -425,9 +426,9 @@ def create_map2(breakpoint_name, zipcode, viewpoint, server_ip, window_width):
                     <b>{row['Px']}(景點X座標)</b><br>
                     <b>{row['Py']}(景點Y座標)</b><br>
                     <b>{row['Changetime']}(資料異動時間)</b><br><br>
-                    <button style="width: 100%;" onclick="openWindow('upload', '{id_}', '{name}', '{server_ip}')">上傳照片</button><br><br>
-                    <button style="width: 100%;" onclick="openWindow('download', '{id_}', '{name}', '{server_ip}')">下載照片</button><br><br>
-                    <button style="width: 100%;" onclick="openWindow('edit', '{id_}', '{name}', '{server_ip}')">填寫相關資訊</button>
+                    <button style="width: 50%;" onclick="openWindow('upload', '{id_}', '{name}', '{server_ip}')">上傳照片</button><br><br>
+                    <button style="width: 50%;" onclick="openWindow('download', '{id_}', '{name}', '{server_ip}')">下載照片</button><br><br>
+                    <button style="width: 50%;" onclick="openWindow('edit', '{id_}', '{name}', '{server_ip}')">填寫相關資訊</button>
                 </div>
                 <script>
                         function openWindow(action, locationId, name, server_ip) {{
@@ -521,6 +522,33 @@ def create_map2(breakpoint_name, zipcode, viewpoint, server_ip, window_width):
             ## mymap.add_child(marker_cluster)
             ###
             ## Marker(location = [row['Py'], row['Px']], popup = row['Name'], icon=folium.Icon(color="green")).add_to(mymap)
+            ###
+            # 注入 CSS
+            css = """
+            <style>
+            .leaflet-popup-content-wrapper {
+                background: rgba(255,255,255,0) !important;
+                color: black !important;
+            }
+            .leaflet-popup-content,
+            .leaflet-popup-content * {
+                color: black !important;
+            }
+            .leaflet-popup-tip {
+                background: rgba(255,255,255,0) !important;
+            }
+            /* 強制覆蓋 Bootstrap 的 .btn */
+            /* .leaflet-popup-content button,
+            .leaflet-popup-content .btn {
+                background-color: transparent !important;
+                color: red !important;
+                border: 1px solid black !important;
+                box-shadow: none !important;
+            } */
+            </style>
+            """
+            mymap.get_root().html.add_child(Element(css))
+            ###
             Marker(location = [row['Py'], row['Px']], popup =popup, icon=folium.Icon(color="red")).add_to(mymap)
             # Marker(location = [row['Py'], row['Px']], popup =popup_html, icon=folium.Icon(color="red")).add_to(mymap)
     #
