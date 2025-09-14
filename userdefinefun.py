@@ -128,6 +128,7 @@ def create_map1(breakpoint_name, zipcode, server_ip, window_width):
     import geopandas as gpd
     import folium
     from folium import Map, Marker, Popup
+    from folium import Element
     from folium.plugins import MarkerCluster
     import branca
     import io
@@ -173,15 +174,63 @@ def create_map1(breakpoint_name, zipcode, server_ip, window_width):
             ## popup_html = f"""
             ##    <div id="popup-content" style="width: auto; max-width: 60vx; max-height: 60vh; overflow-y: auto;">
             popup_html = f"""
+                <html><body>
+                <style> 
+                /* popup 內所有按鈕（含 Bootstrap .btn） */
+                button, .btn {{
+                  /* 透明底但看得見：淡白底 + 清楚邊框 */
+                  background: rgba(255,255,255,0.1) !important;   /* 基本透明度 */
+                  /* border: 2px solid rgba(0,0,0,0.6) !important; */
+                  color: #003366 !important;       /* 深藍，穩重、易讀 */
+                  border: 1.5px solid #003366 !important;
+
+                  /* 輕微毛玻璃，讓地圖紋理不搶眼（支援瀏覽器才會生效） */
+                  -webkit-backdrop-filter: blur(2px);
+                  backdrop-filter: blur(2px);
+
+                  /* 形狀與間距 */
+                  border-radius: 10px !important;
+                  padding: 6px 12px !important;
+                  font-weight: 600;
+
+                  /* 移除瀏覽器/Bootstrap 遺留外觀 */
+                  background-image: none !important;
+                  box-shadow: 0 1px 2px rgba(0,0,0,0.15) !important;
+                  outline: none !important;
+                  -webkit-appearance: none !important;
+                  -moz-appearance: none !important;
+                  appearance: none !important;
+
+                  /* 動畫回饋 */
+                  transition: background .15s ease, box-shadow .15s ease, transform .05s ease;
+                }}
+
+                /* 滑過更清楚一點 */
+                button:hover, .btn:hover {{
+                  background: rgba(255,255,255,0.30) !important;
+                  box-shadow: 0 2px 6px rgba(0,0,0,0.25) !important;
+                }}
+
+                /* 點下去有壓下感 */
+                button:active, .btn:active {{
+                  transform: translateY(1px);
+                }}
+
+                /* 鍵盤可及性：聚焦外框（不會改變透明感） */
+                button:focus-visible, .btn:focus-visible {{
+                  box-shadow: 0 0 0 3px rgba(0,123,255,0.35) !important;
+                }}
+                </style>
                 <div id="popup-content" style="max-width: 98vw; max-height: 98vh; font-size: 14px;">        
                     <b>{name}</b><br>
                     <b>{row['Opentime']}</b><br>
                     <b>{row['Add']}</b><br>
                     <b>{row['Tel']}</b><br><br>
-                    <button style="width: 100%;" onclick="openWindow('upload', '{id_}', '{name}', '{server_ip}')">上傳照片</button><br><br>
-                    <button style="width: 100%;" onclick="openWindow('download', '{id_}', '{name}', '{server_ip}')">下載照片</button><br><br>
+                    <button onclick="openWindow('upload', '{id_}', '{name}', '{server_ip}')">上傳照片</button><br><br>
+                    <button onclick="openWindow('download', '{id_}', '{name}', '{server_ip}')">下載照片</button><br><br>
                     <!-- <button onclick="openWindow('edit', '{id_}', '{name}')">填寫相關資訊</button> -->
-                    <script>
+                </div>
+                <script>
                         function openWindow(action, locationId, name, server_ip) {{
                             // server_ip :取自Dash 的 index_string 模板定義
                             let url = '';
@@ -247,8 +296,8 @@ def create_map1(breakpoint_name, zipcode, server_ip, window_width):
                         //    }}
                         //   }};
                     // }}
-                    </script>
-                </div>
+                </script>
+                </body></html>
             """
 
 
@@ -263,7 +312,36 @@ def create_map1(breakpoint_name, zipcode, server_ip, window_width):
             # popup = folium.Popup(iframe, max_width='auto')
             popup = folium.Popup(iframe, max_width=window_width*0.25)
             ##popup = folium.Popup(popup_html, max_width=300)
-            ##
+            ###
+            # 注入 CSS
+            css = """
+            <style>
+            .leaflet-popup-content-wrapper {
+                background: rgba(255,255,255,0.6) !important; /* 半透明白底 */
+                color: #000 !important;  /* 黑色字 */
+                font-weight: 500;        /* 稍微加粗，增強對比 */
+                
+            }
+            .leaflet-popup-content,
+            .leaflet-popup-content * {
+                color: #000 !important;
+                text-shadow: 0px 0px 3px rgba(255, 255, 255, 0.8);
+            }
+            .leaflet-popup-tip {
+                background: rgba(255,255,255,0.6) !important;
+            }
+            /* 強制覆蓋 Bootstrap 的 .btn */
+            /* .leaflet-popup-content button,
+            .leaflet-popup-content .btn {
+                background-color: transparent !important;
+                color: red !important;
+                border: 1px solid black !important;
+                box-shadow: none !important;
+            } */
+            </style>
+            """
+            mymap.get_root().html.add_child(Element(css))
+            ###
             marker_cluster.add_child(Marker(location = [row['Py'], row['Px']], popup = popup, icon=folium.Icon(color="red")))
             mymap.add_child(marker_cluster)
     #
@@ -426,9 +504,9 @@ def create_map2(breakpoint_name, zipcode, viewpoint, server_ip, window_width):
                     <b>{row['Px']}(景點X座標)</b><br>
                     <b>{row['Py']}(景點Y座標)</b><br>
                     <b>{row['Changetime']}(資料異動時間)</b><br><br>
-                    <button style="width: 50%;" onclick="openWindow('upload', '{id_}', '{name}', '{server_ip}')">上傳照片</button><br><br>
-                    <button style="width: 50%;" onclick="openWindow('download', '{id_}', '{name}', '{server_ip}')">下載照片</button><br><br>
-                    <button style="width: 50%;" onclick="openWindow('edit', '{id_}', '{name}', '{server_ip}')">填寫相關資訊</button>
+                    <button onclick="openWindow('upload', '{id_}', '{name}', '{server_ip}')">上傳照片</button><br><br>
+                    <button onclick="openWindow('download', '{id_}', '{name}', '{server_ip}')">下載照片</button><br><br>
+                    <button onclick="openWindow('edit', '{id_}', '{name}', '{server_ip}')">填寫相關資訊</button>
                 </div>
                 <script>
                         function openWindow(action, locationId, name, server_ip) {{
@@ -527,15 +605,18 @@ def create_map2(breakpoint_name, zipcode, viewpoint, server_ip, window_width):
             css = """
             <style>
             .leaflet-popup-content-wrapper {
-                background: rgba(255,255,255,0) !important;
-                color: black !important;
+                background: rgba(255,255,255,0.6) !important; /* 半透明白底 */
+                color: #000 !important;  /* 黑色字 */
+                font-weight: 500;        /* 稍微加粗，增強對比 */
+                
             }
             .leaflet-popup-content,
             .leaflet-popup-content * {
-                color: black !important;
+                color: #000 !important;
+                text-shadow: 0px 0px 3px rgba(255, 255, 255, 0.8);
             }
             .leaflet-popup-tip {
-                background: rgba(255,255,255,0) !important;
+                background: rgba(255,255,255,0.6) !important;
             }
             /* 強制覆蓋 Bootstrap 的 .btn */
             /* .leaflet-popup-content button,
